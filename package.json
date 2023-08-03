@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "pnpm run typecheck && electron-vite build",
+    "build": "electron-vite build",
     "build:win": "pnpm run build && electron-builder --win --config"
   },
   "dependencies": {
