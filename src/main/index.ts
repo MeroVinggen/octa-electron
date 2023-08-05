@@ -1,24 +1,30 @@
-import { app, shell, BrowserWindow } from 'electron';
+import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 
-function createWindow(): void {
-  // Create the browser window.
+ipcMain.on("test", (ev, d) => {
+    console.log(d); 
+})
+
+function createWindow() {
+  // Create the browser window
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
-    show: false,
+    // show: false,
+    show: true, 
     autoHideMenuBar: true,
     icon,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
+      contextIsolation: false
     },
   });
-
+  
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show();
+    // mainWindow.show();
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
