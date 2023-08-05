@@ -7,6 +7,9 @@ dependencies:
   '@electron-toolkit/utils':
     specifier: ^1.0.2
     version: 1.0.2(electron@24.6.2)
+  node-json-db:
+    specifier: ^2.2.0
+    version: 2.2.0
 
 devDependencies:
   '@electron-toolkit/tsconfig':
@@ -1902,6 +1905,12 @@ packages:
     dev: true
     optional: true
 
+  /node-json-db@2.2.0:
+    resolution: {integrity: sha512-GBuXPjItZ+XivMxR7bhSjVeXKiHZKRN/HbvqrwVemV6V5atcnIIZbg2J2vJHE6RYHydtPCJoUy05YaK4wQO0TA==}
+    dependencies:
+      rwlock: 5.0.0
+    dev: false
+
   /node-releases@2.0.13:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: true
@@ -2055,6 +2064,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /rwlock@5.0.0:
+    resolution: {integrity: sha512-XgzRqLMfCcm9QfZuPav9cV3Xin5TRcIlp4X/SH3CvB+x5D2AakdlEepfJKDd8ByncvfpcxNWdRZVUl38PS6ZJg==}
+    dev: false
 
   /safe-buffer@5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
