@@ -1,40 +1,58 @@
-import { appdb } from './DB';
-// import { AppSettings, SettingsStore, YearData } from './interface';
+import { desktopDB } from './desktopDB';
+import { desktopDBObserver } from './desktopDBObserver';
+import { Word } from './interface';
 
-export const onAddWord = async (word) => {
-  await appdb.push(`/dictionary/${word.id}`, word);
+// add & edit word
+export const onAddWord = async (word: Word) => {
+  await desktopDB.push(`/dictionary/${word.id}`, word);
 };
 
 export const onDeleteWord = async (wordId) => {
-  await appdb.delete(`/dictionary/${wordId}`);
+  await desktopDB.delete(`/dictionary/${wordId}`);
 };
 
 export const onDictionaryClear = async () => {
-  await appdb.delete(`/dictionary`);
+  await desktopDB.delete(`/dictionary`);
+};
+
+export const getDictionaryData = async () => {
+  return desktopDB.getData(`/dictionary`);
 };
 
 export const onStatisticClear = async () => {
-  await appdb.delete('/statistic');
+  await desktopDB.delete('/statistic');
 };
 
+// init & update
 export const updateStatistic = async (yearData) => {
-  await appdb.push(`/statistic/${yearData.year}`, yearData);
+  await desktopDB.push(`/statistic/${yearData.year}`, yearData);
 };
 
+// init & update
 export const updatePracticeData = async (practiceData) => {
-  await appdb.push('/practiceSettings', practiceData);
+  await desktopDB.push('/practiceSettings', practiceData);
 };
 
+// init & update
 export const updateAppSettingsData = async (appSettingsData) => {
-  await appdb.push('/appSettings', appSettingsData);
+  await desktopDB.push('/appSettings', appSettingsData);
+  desktopDBObserver.broadcast("updateAppSettings");
 };
 
 export const onAppSettingsClear = async () => {
-  await appdb.delete('/appSettings');
+  await desktopDB.delete('/appSettings');
+  desktopDBObserver.broadcast("clearAppSettings");
 };
 
+export const getAppSettingsData = async () => {
+  return desktopDB.getData(`/appSettings`);
+};
 
-const dictionaryDataImport = (rows) => {
+type Rows = Word & {
+  $types: unknown;
+};
+
+const dictionaryDataImport = (rows: Rows[]) => {
   // removing unneeded '$types' prop
   rows.forEach(({ $types, ...word }) => onAddWord(word));
 };
@@ -60,12 +78,12 @@ const importHandlers = {
 
 const parseImportedData = async (file: File) => {
   const dataArr = JSON.parse(await file.text()).data.data;
-  dataArr.forEach(({tableName, rows}) => {
+  dataArr.forEach(({ tableName, rows }) => {
     importHandlers[tableName](rows);
   });
-}
+};
 
 export const importAppDBData = async (file: File) => {
-  await appdb.delete('/');
+  await desktopDB.delete('/');
   parseImportedData(file);
 };
