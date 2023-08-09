@@ -1,7 +1,7 @@
-import { appDBObserver } from './appDBObserver';
+import { ipcMain } from 'electron';
 import { importAppDBData, onAddWord, onAppSettingsClear, onDeleteWord, onDictionaryClear, onStatisticClear, updateAppSettingsData, updatePracticeData, updateStatistic } from './utils';
 
-const appDBObserverListeners = {
+const webDBListeners = {
   onAddWord,
   onEditWord: onAddWord,
   onDeleteWord,
@@ -17,8 +17,11 @@ const appDBObserverListeners = {
   importAppDBData,
 };
 
-export const initDesktopDBListeners = () => {
-  appDBObserver.subscribe((action, data) => {
-    appDBObserverListeners[action](data);
+/**
+ * updating desktop DB according to web DB changes
+ */
+export const initWebDBListeners = () => {
+  Object.entries(webDBListeners).forEach(([key, handler]) => {
+    ipcMain.on(key, (_, data) => handler(data));
   });
 };
