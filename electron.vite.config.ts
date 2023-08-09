@@ -1,4 +1,5 @@
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+import { resolve } from 'path';
 
 const build = {
   watch: {
@@ -13,7 +14,20 @@ export default defineConfig({
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
-    build,
+    build: {
+      watch: {
+        buildDelay: 2000
+      },
+      rollupOptions: {
+        input: {
+          index: resolve(__dirname, 'src/preload/index.ts'),
+          "passivePractice/index": resolve(__dirname, 'src/preload/passivePractice/index.ts'),
+        },
+        output: {
+          entryFileNames: "[name].js"
+        }
+      }
+    },
   },
   renderer: {
     build,
