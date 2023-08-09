@@ -15,9 +15,7 @@ export default defineConfig({
   preload: {
     plugins: [externalizeDepsPlugin()],
     build: {
-      watch: {
-        buildDelay: 2000
-      },
+      ...build,
       rollupOptions: {
         input: {
           index: resolve(__dirname, 'src/preload/index.ts'),
