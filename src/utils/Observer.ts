@@ -1,4 +1,4 @@
-type Subscriber = (action: string, data: unknown) => void;
+type Subscriber = (action: string, data?: unknown) => void;
 
 export class Observer {
   private subscribers: Array<Subscriber>;
@@ -15,7 +15,7 @@ export class Observer {
     this.subscribers = this.subscribers.filter((subscriber) => subscriber !== callback);
   }
 
-  public broadcast(action: string, data: unknown) {
+  public broadcast(action: string, data?: unknown) {
     this.subscribers.forEach((callback) => callback(action, data));
   }
 };
