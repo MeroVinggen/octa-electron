@@ -5,7 +5,7 @@ const build = {
   watch: {
     buildDelay: 2000
   },
-}
+};
 
 export default defineConfig({
   main: {
@@ -18,16 +18,21 @@ export default defineConfig({
       ...build,
       rollupOptions: {
         input: {
-          index: resolve(__dirname, 'src/preload/index.ts'),
-          "passivePractice/index": resolve(__dirname, 'src/preload/passivePractice/index.ts'),
-        },
-        output: {
-          entryFileNames: "[name].js"
+          "mainWindow/main": resolve(__dirname, 'src/preload/mainWindow/main.ts'),
+          "passivePractice/main": resolve(__dirname, 'src/preload/passivePractice/main.ts'),
         }
       }
     },
   },
   renderer: {
-    build,
+    build: {
+      ...build,
+      rollupOptions: {
+        input: {
+          "mainWindow": resolve(__dirname, 'src/renderer/mainWindow/index.html'),
+          "passivePractice": resolve(__dirname, 'src/renderer/passivePractice/index.html'),
+        }
+      }
+    }
   },
 });
