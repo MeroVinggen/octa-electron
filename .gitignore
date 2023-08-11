@@ -5,5 +5,5 @@ out
 .vscode
 errorLogs
 
-AppDB.json
+DesktopDB.json
 .todo
