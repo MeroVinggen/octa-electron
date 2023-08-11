@@ -6,4 +6,5 @@ out
 errorLogs
 
 DesktopDB.json
+appConfig.json
 .todo
