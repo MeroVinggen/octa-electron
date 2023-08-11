@@ -14,7 +14,9 @@ export const WEEK_DAY_BY_INDEX = {
 
 export const toMilliseconds = ({ h = 0, m = 0, s = 0 }: { h?: number, m?: number, s?: number; }) => (h * 3600 + m * 60 + s) * 1000;
 
-export const ERRORS_LOGS_FOLDER = join(resolve('./'), "errorLogs");
+export const ROOT_PATH = resolve('./');
+
+export const ERRORS_LOGS_FOLDER = join(ROOT_PATH, "errorLogs");
 
 export const createErrorLogsFolder = () => {
   if (!existsSync(ERRORS_LOGS_FOLDER)) {
