@@ -18,7 +18,7 @@ export const createErrorWindow = () => {
 
   const win = createWindow({
     windowSettings: {
-      height: 300,
+      height: 350,
       width: 400,
       show: false,
       frame: false,
