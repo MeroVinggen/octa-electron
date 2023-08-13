@@ -11,8 +11,6 @@ import { initWebDBListeners } from '../DB/webDBListeners';
 import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
 import { createMainWindow } from '../mainWindow/windowCreation';
 import { initPassivePractice } from '../practice/passive/main';
-import { createErrorWindow } from '../errorWindow/windowCreation';
-import { createPassivePracticeWindow } from '../practice/passive/windowCreation';
 
 const APP_CONFIG = {
   firstLaunch: false
@@ -74,7 +72,5 @@ type OnAppReadyProps = {
 export const onAppReady = (data: OnAppReadyProps) => {
   if (data.openAppWindowAtStart) {
     createMainWindow();
-    // createPassivePracticeWindow()
-    // createErrorWindow()
   }
 };
