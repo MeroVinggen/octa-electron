@@ -3,31 +3,41 @@ import { type BrowserWindow } from 'electron';
 import { join } from 'path';
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
 import { createWindow } from '../../utils/window/windowCreator';
+import { addOpenedErrorWindow, subtractOpenedErrorWindow } from './openedWindowCounter';
 
-const mainWindowSourceLoader = (win: BrowserWindow) => {
+const errorWindowSourceLoader = (win: BrowserWindow) => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    win.loadURL(process.env['ELECTRON_RENDERER_URL'] + "/mainWindow/index.html");
+    win.loadURL(process.env['ELECTRON_RENDERER_URL'] + "/errorWindow/index.html");
   } else {
-    win.loadFile(join(__dirname, '../renderer/mainWindow/index.html'));
+    win.loadFile(join(__dirname, '../renderer/errorWindow/index.html'));
   }
 };
 
-export const createMainWindow = () => {
-  const winRegistryInstance = windowInstanceRegistry.get("main")!;
-  
+export const createErrorWindow = () => {
+  const winRegistryInstance = windowInstanceRegistry.get("error")!;
+
   const win = createWindow({
     windowSettings: {
-      height: 700,
-      width: 800,
+      height: 300,
+      width: 400,
       show: false,
+      frame: false,
+      transparent: true,
+      resizable: false,
       webPreferences: {
-        preload: join(__dirname, '../preload/mainWindow/main.js'),
+        preload: join(__dirname, '../preload/errorWindow/main.js'),
         sandbox: false,
         devTools: is.dev,
       }
     },
-    sourceLoader: mainWindowSourceLoader,
+    sourceLoader: errorWindowSourceLoader,
     listeners: [
+      {
+        event: 'show',
+        handlers: [
+          addOpenedErrorWindow,
+        ]
+      },
       {
         event: 'ready-to-show',
         handlers: [
@@ -39,6 +49,7 @@ export const createMainWindow = () => {
         event: 'closed',
         handlers: [
           () => winRegistryInstance.onClose(),
+          subtractOpenedErrorWindow,
         ]
       },
     ]

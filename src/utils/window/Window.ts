@@ -1,7 +1,7 @@
 import { type BrowserWindow } from 'electron';
 
 export class Window {
-  private win: BrowserWindow | null;
+  private win: BrowserWindow | undefined;
   private isClosed = true;
 
   getWin() {
@@ -13,7 +13,19 @@ export class Window {
   }
 
   nullify() {
-    this.win = null;
+    this.win = undefined;
+  }
+
+  /**
+   * close window if open
+   */
+  close() {
+    if (this.isClosed) {
+      return;
+    }
+
+    this.win!.close();
+    this.onClose();
   }
 
   onClose() {

@@ -16,10 +16,16 @@ export const createPassivePracticeWindow = () => {
   const winRegistryInstance = windowInstanceRegistry.get("passivePractice")!;
 
   const win = createWindow({
-    height: 600,
-    width: 400,
-    show: false,
-    preload: '../preload/passivePractice/main.js',
+    windowSettings: {
+      height: 600,
+      width: 400,
+      show: false,
+      webPreferences: {
+        preload: join(__dirname, '../preload/passivePracticeWindow/main.js'),
+        sandbox: false,
+        devTools: is.dev,
+      }
+    },
     sourceLoader: passivePracticeWindowSourceLoader,
     listeners: [
       {

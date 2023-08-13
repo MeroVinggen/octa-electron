@@ -19,7 +19,8 @@ export default defineConfig({
       rollupOptions: {
         input: {
           "mainWindow/main": resolve(__dirname, 'src/preload/mainWindow/main.ts'),
-          "passivePractice/main": resolve(__dirname, 'src/preload/passivePractice/main.ts'),
+          "passivePracticeWindow/main": resolve(__dirname, 'src/preload/passivePracticeWindow/main.ts'),
+          "errorWindow/main": resolve(__dirname, 'src/preload/errorWindow/main.ts'),
         }
       }
     },
@@ -31,6 +32,7 @@ export default defineConfig({
         input: {
           "mainWindow": resolve(__dirname, 'src/renderer/mainWindow/index.html'),
           "passivePractice": resolve(__dirname, 'src/renderer/passivePractice/index.html'),
+          "errorWindow": resolve(__dirname, 'src/renderer/errorWindow/index.html'),
         }
       }
     }

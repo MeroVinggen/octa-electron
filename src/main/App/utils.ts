@@ -1,13 +1,18 @@
 import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
-import { initRenderersErrorListeners } from '../../shared/Errors/renderersErrorListeners';
+import { initIpcMainErrorHandlers } from '../../shared/Errors/ipcMainErrorHandlers';
+import { initRenderersErrorListeners } from '../../shared/Errors/ipcRendererErrorListeners';
 import { createErrorLogFolder } from '../../shared/Errors/utils';
 import { initWindowInstanceRegistry } from '../../shared/windowRegistries/utils';
 import { buildPathFromRoot } from '../../utils/helpers';
 import { getAppSettingsData } from '../DB/utils';
+import { initUtilsWithCatchSetup } from '../DB/utilsWithCatchSetup';
 import { initWebDBListeners } from '../DB/webDBListeners';
+import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
 import { createMainWindow } from '../mainWindow/windowCreation';
 import { initPassivePractice } from '../practice/passive/main';
+import { createErrorWindow } from '../errorWindow/windowCreation';
+import { createPassivePracticeWindow } from '../practice/passive/windowCreation';
 
 const APP_CONFIG = {
   firstLaunch: false
@@ -51,9 +56,12 @@ export const appNotFirstLaunchSetup = () => {
  */
 export const appGeneralSetup = () => {
   createErrorLogFolder();
+  initUtilsWithCatchSetup();
   initRenderersErrorListeners();
   initWindowInstanceRegistry();
   initWebDBListeners();
+  initErrorWindowListeners();
+  initIpcMainErrorHandlers();
 };
 
 type OnAppReadyProps = {
@@ -66,5 +74,7 @@ type OnAppReadyProps = {
 export const onAppReady = (data: OnAppReadyProps) => {
   if (data.openAppWindowAtStart) {
     createMainWindow();
+    // createPassivePracticeWindow()
+    // createErrorWindow()
   }
 };

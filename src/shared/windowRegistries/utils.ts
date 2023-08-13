@@ -7,4 +7,5 @@ import { windowInstanceRegistry } from './windowInstanceRegistry';
 export const initWindowInstanceRegistry = () => {
   windowInstanceRegistry.set("main", new Window());
   windowInstanceRegistry.set("passivePractice", new Window());
+  windowInstanceRegistry.set("error", new Window());
 };

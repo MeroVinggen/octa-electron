@@ -15,25 +15,22 @@ let passivePracticeIntervalTimerId: NodeJS.Timeout;
 
 export const getCurrentPassivePracticeDataSnapshot = () => currentPassivePracticeDataSnapshot;
 
-export const stopCurrentPassivePracticeTimers = () => {
-  console.log("stopCurrentPassivePracticeTimers");
+const stopCurrentPassivePracticeTimers = () => {
   clearTimeout(passivePracticeTimeFrameTimerId);
   clearTimeout(passivePracticeIntervalTimerId);
 };
 
 const reInitPassivePractice = () => {
-  console.log("reInitPassivePractice");
   stopCurrentPassivePracticeTimers();
+  windowInstanceRegistry.get("passivePractice")!.close();
   setupPassivePractice();
 };
 
 export const setupPassivePractice = async () => {
-  console.log("setupPassivePractice");
   const passivePracticeData = (await getAppSettingsData()).practice.passive;
   currentPassivePracticeDataSnapshot = passivePracticeData;
 
   if (!passivePracticeData.enabled) {
-    console.log("passivePracticeData not enabled, exit");
     return;
   }
 
@@ -43,7 +40,6 @@ export const setupPassivePractice = async () => {
 
   // no current day key in passive practice settings
   if (!currentDayHasPassivePractice) {
-    console.log("currentDay has no PassivePractice, exit");
     return;
   }
 
@@ -52,7 +48,7 @@ export const setupPassivePractice = async () => {
 
   // if days settings are enabled, but no timeFrames added
   if (actualTimeFrames.length === 0) {
-    console.log("no actualTimeFrames, exit");
+    windowInstanceRegistry.get("passivePractice")!.close();
     return;
   }
 
@@ -77,8 +73,6 @@ const getActualTimeFrames = (passivePracticeData: PracticeSettings, currentDayKe
     return checkTimeFrameIsSuitable(currentTimeInMS, timeOfTimeFrameInMS);
   });
 
-  console.log("actualTimeFrames", actualTimeFrames);
-
   return daySettings.interval;
 };
 
@@ -94,29 +88,21 @@ const getIntervalTimeAsMS = (currentInterval: string) => {
 };
 
 const initPassivePracticeTimeFrameTimer = () => {
-  console.log("initPassivePracticeTimeFrameTimer");
-
   // next time frame to start
   currentTimeFrame = actualTimeFrames.shift()!;
-  console.log("currentTimeFrame:", currentTimeFrame);
   const leftTimeToNextTimeFrameInMS = getTimeToNextTimeFrame();
   passivePracticeTimeFrameTimerId = setTimeout(onPassivePracticeIntervalTick, leftTimeToNextTimeFrameInMS);
-  console.log("set setTimeout for next frame:", leftTimeToNextTimeFrameInMS);
 };
 
 const setNextPassivePracticeTimeFrameTimer = () => {
-  console.log("setNextPassivePracticeTimeFrameTimer");
   if (actualTimeFrames.length === 0) {
-    console.log("no actualTimeFrames left, finish");
     return;
   }
 
   // next time frame to start
   currentTimeFrame = actualTimeFrames.shift()!;
-  console.log("currentTimeFrame:", currentTimeFrame);
   const leftTimeToNextTimeFrameInMS = getTimeToNextTimeFrame();
   passivePracticeTimeFrameTimerId = setTimeout(setPassivePracticeTimeout, leftTimeToNextTimeFrameInMS);
-  console.log("set setTimeout for next frame:", leftTimeToNextTimeFrameInMS);
 };
 
 const getTimeToNextTimeFrame = () => {
@@ -134,25 +120,21 @@ const getTimeToNextTimeFrame = () => {
  * timeout to next passive practice on current timeFrame by interval
  */
 const setPassivePracticeTimeout = () => {
-  console.log("set setTimeout for next interval:", interval);
   passivePracticeIntervalTimerId = setTimeout(onPassivePracticeIntervalTick, interval);
 };
 
 const onPassivePracticeIntervalTick = () => {
-  console.log('onPassivePracticeIntervalTick');
   callPassivePractice();
   afterCallPassivePractice();
 };
 
 const callPassivePractice = () => {
   if (windowInstanceRegistry.get("passivePractice")?.getIsClosed()) {
-    console.log("call passive practice window");
     createPassivePracticeWindow();
   }
 };
 
 const afterCallPassivePractice = () => {
-  console.log("afterCallPassivePractice");
   const currentDate = new Date();
   const currentTimeInMS = toMilliseconds({ h: currentDate.getHours(), m: currentDate.getMinutes() });
 
