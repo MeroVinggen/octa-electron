@@ -10,7 +10,8 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
-    "build:win": "pnpm run build && electron-builder --win --config"
+    "build:win": "pnpm run build && electron-builder --win --config",
+    "clear:errLogs": "tsx ./src/utils/dev/clearErrorLogs.ts"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^2.0.0",
@@ -25,6 +26,7 @@
     "electron-builder": "^23.6.0",
     "electron-vite": "^1.0.25",
     "prettier": "^2.8.8",
+    "tsx": "^3.12.7",
     "typescript": "^5.1.6",
     "vite": "^4.4.2"
   }
