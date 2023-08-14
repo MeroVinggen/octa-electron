@@ -10,6 +10,7 @@
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "build:win": "pnpm run build && electron-builder --win --config",
+    "build:win:without-renderer-build": "electron-builder --win --config",
     "clear:errLogs": "tsx ./src/utils/dev/clearErrorLogs.ts"
   },
   "dependencies": {
@@ -23,7 +24,7 @@
     "@types/node": "^18.16.19",
     "electron": "^24.6.2",
     "electron-builder": "^23.6.0",
-    "electron-vite": "^1.0.25",
+    "electron-vite": "^1.0.27",
     "prettier": "^2.8.8",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
