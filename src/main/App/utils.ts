@@ -11,6 +11,7 @@ import { initWebDBListeners } from '../DB/webDBListeners';
 import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
 import { createMainWindow } from '../mainWindow/windowCreation';
 import { initPassivePractice } from '../practice/passive/main';
+import { initAppTray } from './tray';
 
 const APP_CONFIG = {
   firstLaunch: false
@@ -60,6 +61,7 @@ export const appGeneralSetup = () => {
   initWebDBListeners();
   initErrorWindowListeners();
   initIpcMainErrorHandlers();
+  initAppTray();
 };
 
 type OnAppReadyProps = {

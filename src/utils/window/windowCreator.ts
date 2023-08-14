@@ -14,9 +14,9 @@ export const createWindow = (config: CreateWindowConfig) => {
   
   win.setMenu(null);
 
-  if (is.dev) {
+  // if (is.dev) {
     win.webContents.openDevTools();
-  }
+  // }
 
   config.listeners.forEach(({ event, handlers }) => {
     handlers.forEach((handler) => {

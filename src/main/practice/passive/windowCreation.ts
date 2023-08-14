@@ -3,6 +3,7 @@ import { BrowserWindow } from 'electron';
 import { join } from 'path';
 import { createWindow } from '../../../utils/window/windowCreator';
 import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowInstanceRegistry';
+import appIconURL from '/resources/octopus-teal.png?asset';
 
 const passivePracticeWindowSourceLoader = (win: BrowserWindow) => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
@@ -20,6 +21,7 @@ export const createPassivePracticeWindow = () => {
       height: 600,
       width: 400,
       show: false,
+      icon: appIconURL,
       webPreferences: {
         preload: join(__dirname, '../preload/passivePracticeWindow/main.js'),
         sandbox: false,

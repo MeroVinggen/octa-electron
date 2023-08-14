@@ -3,7 +3,6 @@ import { type BrowserWindow } from 'electron';
 import { join } from 'path';
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
 import { createWindow } from '../../utils/window/windowCreator';
-import { addOpenedErrorWindow, subtractOpenedErrorWindow } from './openedWindowCounter';
 
 const errorWindowSourceLoader = (win: BrowserWindow) => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
@@ -18,8 +17,8 @@ export const createErrorWindow = () => {
 
   const win = createWindow({
     windowSettings: {
-      height: 350,
-      width: 400,
+      height: 500,
+      width: 700,
       show: false,
       frame: false,
       transparent: true,
@@ -33,23 +32,10 @@ export const createErrorWindow = () => {
     sourceLoader: errorWindowSourceLoader,
     listeners: [
       {
-        event: 'show',
-        handlers: [
-          addOpenedErrorWindow,
-        ]
-      },
-      {
         event: 'ready-to-show',
         handlers: [
           () => winRegistryInstance.getWin()!.show(),
           () => winRegistryInstance.onOpen(),
-        ]
-      },
-      {
-        event: 'closed',
-        handlers: [
-          () => winRegistryInstance.onClose(),
-          subtractOpenedErrorWindow,
         ]
       },
     ]

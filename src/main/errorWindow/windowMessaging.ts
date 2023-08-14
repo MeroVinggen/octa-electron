@@ -1,16 +1,23 @@
 import { ipcMain } from 'electron';
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
 
-let errorMsg: string;
+const errorMsgs: string[] = [];
 
-export const setErrorMsg = (msg: string) => {
-  errorMsg = msg;
+export const addErrorMsg = (msg: string) => {
+  errorMsgs.push(msg);
+
+  const errorWindow = windowInstanceRegistry.get("error")!;
+
+  // if error window is already open sending updated errors array
+  if (!errorWindow.getIsClosed()) {
+    errorWindow.getWin()!.webContents.send("errorWindowGetError", errorMsgs);
+  }
 };
 
 export const initErrorWindowListeners = () => {
   // on window asking for error msg
   ipcMain.on("errorWindowGetError", (e) => {
-    e.reply("errorWindowGetError", errorMsg);
+    e.reply("errorWindowGetError", errorMsgs);
   });
   
   ipcMain.on("errorWindowOkBtnClick", () => {

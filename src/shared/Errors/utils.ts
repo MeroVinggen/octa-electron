@@ -1,10 +1,10 @@
 import { existsSync, mkdirSync } from 'fs';
 import { appendFile } from 'fs/promises';
 import { join } from 'path';
-import { isMaxNumberOfOPenedErrorWindowReached } from '../../main/errorWindow/openedWindowCounter';
 import { createErrorWindow } from '../../main/errorWindow/windowCreation';
-import { setErrorMsg } from '../../main/errorWindow/windowMessaging';
+import { addErrorMsg } from '../../main/errorWindow/windowMessaging';
 import { buildPathFromRoot } from '../../utils/helpers';
+import { windowInstanceRegistry } from '../windowRegistries/windowInstanceRegistry';
 
 export const ERROR_LOG_FOLDER_PATH = buildPathFromRoot("errorLogs");
 
@@ -32,10 +32,10 @@ export const RunPromiseWithCatch = async<T extends (...args: any) => any>(func: 
 };
 
 export const showErrorWindow = (error: string) => {
-  if (isMaxNumberOfOPenedErrorWindowReached()) {
-    return;
+  addErrorMsg(error);
+  
+  // open error window only if it's closed
+  if (windowInstanceRegistry.get("error")!.getIsClosed()) {
+    createErrorWindow();
   }
-
-  setErrorMsg(error);
-  createErrorWindow();
 };
