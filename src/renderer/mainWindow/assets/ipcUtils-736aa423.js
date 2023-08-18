@@ -1,0 +1,1 @@
+import{w as c}from"./main-428dd009.js";const r=(e,n,o)=>{n?c.onSuccessfulPractice(o):c.onUnsuccessfulPractice(o)},s=()=>{var e;(e=window.electron)==null||e.ipcRenderer.on("newPassivePracticeComplete",r)},t=e=>{var n;(n=window.electron)==null||n.ipcRenderer.send("mainWinErr",e)};export{s as initDesktopActionListeners,t as sendWindowError};
