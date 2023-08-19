@@ -61,7 +61,6 @@ export const appGeneralSetup = () => {
   initWebDBListeners();
   initErrorWindowListeners();
   initIpcMainErrorHandlers();
-  initAppTray();
 };
 
 type OnAppReadyProps = {
@@ -72,6 +71,8 @@ type OnAppReadyProps = {
  * runs after app ready
  */
 export const onAppReady = (data: OnAppReadyProps) => {
+  initAppTray();
+  
   if (data.openAppWindowAtStart) {
     createMainWindow();
   }
