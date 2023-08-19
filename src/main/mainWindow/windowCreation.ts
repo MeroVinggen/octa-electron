@@ -25,7 +25,7 @@ export const createMainWindow = () => {
       webPreferences: {
         preload: join(__dirname, '../preload/mainWindow/main.js'),
         sandbox: false,
-        devTools: true,
+        devTools: is.dev,
       }
     },
     sourceLoader: mainWindowSourceLoader,
