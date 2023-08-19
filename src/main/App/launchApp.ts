@@ -14,4 +14,7 @@ export const launchApp = async () => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
+
+  // preventing app of quit if all windows are closed
+  app.on("window-all-closed", () => null);
 };
