@@ -2,8 +2,8 @@ import { app } from 'electron';
 import { IPC_MAIN_ERROR_FILE_PATH, recordError } from './utils';
 
 export const initIpcMainErrorHandlers = () => {
-  process.on('uncaughtException', async (error) => {
-    await recordError(error, IPC_MAIN_ERROR_FILE_PATH);
+  process.on('uncaughtException', async (error) => {    
+    await recordError(error.message + "\nstack: " + error?.stack, IPC_MAIN_ERROR_FILE_PATH);
     app.exit(1);
   });
 
