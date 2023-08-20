@@ -11,11 +11,14 @@
     "build": "electron-vite build",
     "build:win": "pnpm run build && electron-builder --win --config",
     "build:win:without-renderer-build": "electron-builder --win --config",
-    "clear:errLogs": "tsx ./src/utils/dev/clearErrorLogs.ts"
+    "reset:errLogs": "tsx ./src/utils/dev/appScriptAction.ts resetErrorLogs",
+    "reset:AppDB": "tsx ./src/utils/dev/appScriptAction.ts resetAppDB",
+    "reset:App": "tsx ./src/utils/dev/appScriptAction.ts resetApp"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^1.0.2",
+    "electron-traywindow-positioner": "^1.2.0",
     "node-json-db": "^2.2.0"
   },
   "devDependencies": {
