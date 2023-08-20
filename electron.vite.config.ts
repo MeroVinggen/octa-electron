@@ -21,6 +21,7 @@ export default defineConfig({
           "mainWindow/main": resolve(__dirname, 'src/preload/mainWindow/main.ts'),
           "passivePracticeWindow/main": resolve(__dirname, 'src/preload/passivePracticeWindow/main.ts'),
           "errorWindow/main": resolve(__dirname, 'src/preload/errorWindow/main.ts'),
+          "trayWindow/main": resolve(__dirname, 'src/preload/trayWindow/main.ts'),
         }
       }
     },
@@ -33,6 +34,7 @@ export default defineConfig({
           "mainWindow": resolve(__dirname, 'src/renderer/mainWindow/index.html'),
           "passivePractice": resolve(__dirname, 'src/renderer/passivePractice/index.html'),
           "errorWindow": resolve(__dirname, 'src/renderer/errorWindow/index.html'),
+          "trayWindow": resolve(__dirname, 'src/renderer/trayWindow/index.html'),
         }
       }
     }

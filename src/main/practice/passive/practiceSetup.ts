@@ -8,7 +8,6 @@ import { createPassivePracticeWindow } from './windowCreation';
 let currentPassivePracticeDataSnapshot: string;
 let actualTimeFrames: TimeFrame[];
 let currentTimeFrame: TimeFrame;
-let soundNotification: boolean;
 let interval: number;
 let passivePracticeTimeFrameTimerId: NodeJS.Timeout;
 let passivePracticeIntervalTimerId: NodeJS.Timeout;
@@ -43,7 +42,6 @@ export const setupPassivePractice = async () => {
     return;
   }
 
-  soundNotification = passivePracticeData.soundNotification;
   const currentInterval = getActualTimeFrames(passivePracticeData, currentDayKey, currentDate);
 
   // if days settings are enabled, but no timeFrames added

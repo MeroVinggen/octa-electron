@@ -1,3 +1,4 @@
+import { app } from 'electron';
 import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { initIpcMainErrorHandlers } from '../../shared/Errors/ipcMainErrorHandlers';
@@ -10,12 +11,16 @@ import { initUtilsWithCatchSetup } from '../DB/utilsWithCatchSetup';
 import { initWebDBListeners } from '../DB/webDBListeners';
 import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
 import { createMainWindow } from '../mainWindow/windowCreation';
+import { initMainWindowListeners } from '../mainWindow/windowListeners';
 import { initPassivePractice } from '../practice/passive/main';
-import { initAppTray } from './tray';
+import { initAppTray } from '../tray/initAppTray';
+import { initTrayWindowListeners } from '../tray/windowListeners';
 
 const APP_CONFIG = {
   firstLaunch: false
 };
+
+export const closeApp = () => app.quit();
 
 export const createAppConfig = () => {
   writeFile(buildPathFromRoot("appConfig.json"), JSON.stringify(APP_CONFIG));
@@ -61,6 +66,8 @@ export const appGeneralSetup = () => {
   initWebDBListeners();
   initErrorWindowListeners();
   initIpcMainErrorHandlers();
+  initMainWindowListeners();
+  initTrayWindowListeners();
 };
 
 type OnAppReadyProps = {
@@ -72,7 +79,7 @@ type OnAppReadyProps = {
  */
 export const onAppReady = (data: OnAppReadyProps) => {
   initAppTray();
-  
+
   if (data.openAppWindowAtStart) {
     createMainWindow();
   }

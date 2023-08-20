@@ -1,7 +1,7 @@
 import { is } from '@electron-toolkit/utils';
 import { BrowserWindow } from 'electron';
 
-type WindowEvents = "ready-to-show" | "closed" | "show";
+type WindowEvents = "ready-to-show" | "closed" | "show" | "blur";
 
 type CreateWindowConfig = {
   windowSettings: Electron.BrowserWindowConstructorOptions;
@@ -14,9 +14,9 @@ export const createWindow = (config: CreateWindowConfig) => {
   
   win.setMenu(null);
 
-  // if (is.dev) {
+  if (is.dev) {
     win.webContents.openDevTools();
-  // }
+  }
 
   config.listeners.forEach(({ event, handlers }) => {
     handlers.forEach((handler) => {

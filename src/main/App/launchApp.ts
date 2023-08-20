@@ -4,7 +4,7 @@ import { app } from 'electron';
 export type LaunchAppConfig = {
   afterLaunch: Function[];
 };
-
+ 
 export const launchApp = async () => {
   await app.whenReady();
 

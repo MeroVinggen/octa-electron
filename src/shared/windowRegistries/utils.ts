@@ -8,4 +8,5 @@ export const initWindowInstanceRegistry = () => {
   windowInstanceRegistry.set("main", new Window());
   windowInstanceRegistry.set("passivePractice", new Window());
   windowInstanceRegistry.set("error", new Window());
+  windowInstanceRegistry.set("tray", new Window());
 };
