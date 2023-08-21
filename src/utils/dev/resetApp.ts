@@ -8,8 +8,8 @@ export const resetApp = async () => {
       await (existsSync(join(resolve("./"), "appConfig.json")) && unlink(join(resolve("./"), "appConfig.json")));
       res(null);
     }),
-    await import("./resetAppDB"),
-    await import("./resetErrorLogs"),
+    (await import("./resetAppDB")).resetAppDB(),
+    (await import("./resetErrorLogs")).resetErrorLogs(),
   ]).catch((err) => console.log(err));
 
   console.log("App data resetted");
