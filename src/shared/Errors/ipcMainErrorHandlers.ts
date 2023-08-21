@@ -7,8 +7,8 @@ export const initIpcMainErrorHandlers = () => {
     app.exit(1);
   });
 
-  process.on('unhandledRejection', async (reason) => {
-    await recordError(reason, IPC_MAIN_ERROR_FILE_PATH);
+  process.on('unhandledRejection', async (error: Error) => {
+    await recordError(error.message || error + "\nstack: " + error?.stack, IPC_MAIN_ERROR_FILE_PATH);
     app.exit(1);
   });
 };
