@@ -1,5 +1,5 @@
 import { RunPromiseWithCatch } from '../../shared/Errors/utils';
-import { getAppSettingsData, getDictionaryData, importAppDBData, onAddWord, onAppSettingsClear, onDeleteWord, onDictionaryClear, onStatisticClear, updateAppSettingsData, updatePracticeData, updateStatistic } from './utils';
+import { checkDictionaryIsEmpty, getAppSettingsData, getDictionaryData, importAppDBData, onAddWord, onAppSettingsClear, onDeleteWord, onDictionaryClear, onStatisticClear, updateAppSettingsData, updatePracticeData, updateStatistic } from './utils';
 import { utilsWithCatch } from './utilsWithCatch';
 
 export const initUtilsWithCatchSetup = () => {
@@ -7,6 +7,7 @@ export const initUtilsWithCatchSetup = () => {
   utilsWithCatch.set("onDeleteWord", (...params) => RunPromiseWithCatch(onDeleteWord, params));
   utilsWithCatch.set("onDictionaryClear", (...params) => RunPromiseWithCatch(onDictionaryClear, params));
   utilsWithCatch.set("getDictionaryData", (...params) => RunPromiseWithCatch(getDictionaryData, params));
+  utilsWithCatch.set("checkDictionaryIsEmpty", (...params) => RunPromiseWithCatch(checkDictionaryIsEmpty, params));
   utilsWithCatch.set("onStatisticClear", (...params) => RunPromiseWithCatch(onStatisticClear, params));
   utilsWithCatch.set("updateStatistic", (...params) => RunPromiseWithCatch(updateStatistic, params));
   utilsWithCatch.set("updatePracticeData", (...params) => RunPromiseWithCatch(updatePracticeData, params));

@@ -3,6 +3,7 @@ import { WEEK_DAY_BY_INDEX, toMilliseconds } from '../../../utils/helpers';
 import { desktopDBObserver } from '../../DB/desktopDBObserver';
 import { PracticeSettings, TimeFrame, WEEK_DAYS_SHORTS_TYPE } from '../../DB/interface';
 import { getAppSettingsData } from '../../DB/utils';
+import { utilsWithCatch } from '../../DB/utilsWithCatch';
 import { createPassivePracticeWindow } from './windowCreation';
 
 let currentPassivePracticeDataSnapshot: string;
@@ -126,7 +127,13 @@ const onPassivePracticeIntervalTick = () => {
   afterCallPassivePractice();
 };
 
-const callPassivePractice = () => {
+const callPassivePractice = async () => {
+  const vocabularyIsEmpty = await utilsWithCatch.get("checkDictionaryIsEmpty")!();
+  
+  if (vocabularyIsEmpty) {
+    return;
+  }
+
   if (windowInstanceRegistry.get("passivePractice")?.getIsClosed()) {
     createPassivePracticeWindow();
   }

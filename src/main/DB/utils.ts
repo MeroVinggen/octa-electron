@@ -19,6 +19,14 @@ export const getDictionaryData = async () => {
   return desktopDB.getData(`/dictionary`);
 };
 
+/**
+ * returns `true` if ot's empty, otherwise `false`
+ */
+export const checkDictionaryIsEmpty = async () => {
+  return desktopDB.getData(`/dictionary`)
+    .then((data) => Object.keys(data).length === 0);
+};
+
 export const onStatisticClear = async () => {
   await desktopDB.delete('/statistic');
 };
