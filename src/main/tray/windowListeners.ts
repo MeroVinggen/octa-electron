@@ -10,9 +10,11 @@ const trayMenuItemClickHandlers: Record<trayMenuList[number], Function> = {
   "Exit": () => { closeTrayWindow(); closeApp(); },
 };
 
-const onTrayMenuItemClick = (_, itemName: keyof trayMenuList) => {
+const onTrayMenuItemClick = (_, itemName: trayMenuList[number]) => {
   if (itemName in trayMenuItemClickHandlers) {
     trayMenuItemClickHandlers[itemName]();
+  } else {
+    throw new Error("Unknown tray menu command - " + itemName);
   }
 };
 
