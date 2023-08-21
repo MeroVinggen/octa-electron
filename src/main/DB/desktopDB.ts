@@ -3,5 +3,5 @@ import { join } from 'path';
 import { ROOT_PATH } from '../../utils/helpers';
 
 export const desktopDB = new JsonDB(
-  new Config(join(ROOT_PATH, "src/main/DB/DesktopDB"), true, true)
+  new Config(join(ROOT_PATH, "DB/DesktopDB"), true, true)
 );
