@@ -13,5 +13,5 @@ const commandHandlers = {
 if (command in commandHandlers) {
   commandHandlers[command](params);
 } else {
-  console.log("Unknown command - " + command);
+  throw new Error("Unknown command - " + command)
 }
