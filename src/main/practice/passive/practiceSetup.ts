@@ -13,7 +13,7 @@ let interval: number;
 let passivePracticeTimeFrameTimerId: NodeJS.Timeout;
 let passivePracticeIntervalTimerId: NodeJS.Timeout;
 
-export const getCurrentPassivePracticeDataSnapshot = () => currentPassivePracticeDataSnapshot;
+const getCurrentPassivePracticeDataSnapshot = () => currentPassivePracticeDataSnapshot;
 
 const stopCurrentPassivePracticeTimers = () => {
   clearTimeout(passivePracticeTimeFrameTimerId);
@@ -28,7 +28,7 @@ const reInitPassivePractice = () => {
 
 export const setupPassivePractice = async () => {
   const passivePracticeData = (await getAppSettingsData()).practice.passive;
-  currentPassivePracticeDataSnapshot = passivePracticeData;
+  currentPassivePracticeDataSnapshot = JSON.stringify(passivePracticeData);
 
   if (!passivePracticeData.enabled) {
     return;
@@ -129,7 +129,7 @@ const onPassivePracticeIntervalTick = () => {
 
 const callPassivePractice = async () => {
   const vocabularyIsEmpty = await utilsWithCatch.get("checkDictionaryIsEmpty")!();
-  
+
   if (vocabularyIsEmpty) {
     return;
   }
@@ -163,17 +163,30 @@ const afterCallPassivePractice = () => {
 
 const updateAppSettings = async () => {
   const oldPassivePracticeData = getCurrentPassivePracticeDataSnapshot();
-  const newPassivePracticeData = (await getAppSettingsData()).practice.passive;
+  const newPassivePracticeData = JSON.stringify((await getAppSettingsData()).practice.passive);
 
   const isChangedPassivePracticeData = newPassivePracticeData !== oldPassivePracticeData;
-
+  
   if (isChangedPassivePracticeData) {
     reInitPassivePractice();
   }
 };
 
+let updateAppSettingsWithDebounceTimerID: NodeJS.Timeout;
+
+// 30s
+let updateAppSettingsWithDebounceTimerTimeout = 5_000;
+
+const updateAppSettingsWithDebounce = () => {
+  clearTimeout(updateAppSettingsWithDebounceTimerID);
+  updateAppSettingsWithDebounceTimerID = setTimeout(
+    updateAppSettings, 
+    updateAppSettingsWithDebounceTimerTimeout
+  );
+};
+
 const appDBObserverListeners = {
-  updateAppSettings,
+  updateAppSettings: updateAppSettingsWithDebounce,
   clearAppSettings: stopCurrentPassivePracticeTimers,
 } as const;
 
@@ -184,6 +197,8 @@ export const initPassivePracticeDesktopDBObserverListeners = () => {
   desktopDBObserver.subscribe((action) => {
     if (action in appDBObserverListeners) {
       appDBObserverListeners[action]();
+    } else {
+      throw new Error("Unknown desktopDBObserver command - " + action);
     }
   });
 };
