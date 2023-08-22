@@ -132,11 +132,11 @@ export class Practice {
   /**
   * timeout to next practice on current timeFrame by interval
   */
-  private setPracticeTimeout() {
+  private setPracticeTimeout = () => {
     this.intervalTimerId = setTimeout(this.onIntervalTick, this.interval);
   };
 
-  private onIntervalTick() {
+  private onIntervalTick = () => {
     this.callPractice();
     this.afterCallPractice();
   };
