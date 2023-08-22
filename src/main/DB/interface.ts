@@ -66,6 +66,8 @@ export type BasicSettings = {
   openAppWindowAtStart: boolean;
 };
 
+export type PracticeVariants = keyof AppSettings["practice"];
+
 export type AppSettings = {
   basic: BasicSettings;
   practice: {
