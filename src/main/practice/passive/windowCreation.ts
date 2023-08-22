@@ -1,8 +1,8 @@
 import { is } from '@electron-toolkit/utils';
 import { BrowserWindow } from 'electron';
 import { join } from 'path';
-import { createWindow } from '../../../utils/window/windowCreator';
 import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowInstanceRegistry';
+import { createWindow } from '../../../utils/window/windowCreator';
 import appIconURL from '/resources/octopus-teal.png?asset';
 
 const passivePracticeWindowSourceLoader = (win: BrowserWindow) => {

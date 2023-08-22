@@ -1,11 +1,15 @@
+import { Practice } from '../Practice';
 import { initPassivePracticeDesktopDBObserverListeners } from './desktopDBListeners';
-import { setupPassivePractice } from './practiceSetup';
+import { createPassivePracticeWindow } from './windowCreation';
 import { initWindowListeners } from './windowListeners';
 
+export let passivePractice: Practice;
+
 export const initPassivePractice = () => {
+  passivePractice = new Practice("passivePractice", createPassivePracticeWindow, "passive");
   initWindowListeners();
   initPassivePracticeDesktopDBObserverListeners();
-  setupPassivePractice();
+  passivePractice.setup();
 };
 
 /**

@@ -2,15 +2,14 @@ import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowI
 import { desktopDBObserver } from '../../DB/desktopDBObserver';
 import { Word } from '../../DB/interface';
 import { checkDictionaryIsEmpty, getAppSettingsData } from '../../DB/utils';
-import { getCurrentPassivePracticeDataSnapshot } from './currentPassivePracticeDataSnapshot';
-import { reInitPassivePractice, stopCurrentPassivePracticeTimers } from './practiceSetup';
+import { passivePractice } from './main';
 
 const proceedIfPassivePracticeWindowNotClosed = (callback: Function, ...params: unknown[]) => {
   if (windowInstanceRegistry.get("passivePractice")!.getIsClosed()) {
     return;
   }
   callback(...params);
-}
+};
 
 const onEditWord = (wordId: Word["id"]) => {
   windowInstanceRegistry.get("passivePractice")!.getWin()!.webContents.send("onEditWord", wordId);
@@ -30,14 +29,14 @@ const onDictionaryClear = () => {
 };
 
 const updateAppSettings = async () => {
-  const oldPassivePracticeDataString = getCurrentPassivePracticeDataSnapshot();
+  const oldPassivePracticeDataString = passivePractice.settingsSnapshot.getSnapshot();
   const newPassivePracticeData = (await getAppSettingsData()).practice.passive;
   const newPassivePracticeDataString = JSON.stringify(newPassivePracticeData);
 
   const isChangedPassivePracticeData = newPassivePracticeDataString !== oldPassivePracticeDataString;
 
   if (isChangedPassivePracticeData) {
-    reInitPassivePractice(newPassivePracticeData);
+    passivePractice.reInit(newPassivePracticeData);
   }
 };
 
@@ -60,7 +59,7 @@ const appDBObserverListeners = {
   onDeleteWord: (data) => proceedIfPassivePracticeWindowNotClosed(onDeleteWord, data),
   onDictionaryClear,
   updateAppSettings: updateAppSettingsWithDebounce,
-  clearAppSettings: stopCurrentPassivePracticeTimers,
+  clearAppSettings: () => passivePractice.stopCurrentTimers(),
 } as const;
 
 /**
