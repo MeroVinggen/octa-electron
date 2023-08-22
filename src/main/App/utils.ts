@@ -7,12 +7,11 @@ import { createErrorLogFolder } from '../../shared/Errors/utils';
 import { initWindowInstanceRegistry } from '../../shared/windowRegistries/utils';
 import { buildPathFromRoot } from '../../utils/helpers';
 import { getAppSettingsData } from '../DB/utils';
-import { initUtilsWithCatchSetup } from '../DB/utilsWithCatchSetup';
 import { initWebDBListeners } from '../DB/webDBListeners';
 import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
 import { createMainWindow } from '../mainWindow/windowCreation';
 import { initMainWindowListeners } from '../mainWindow/windowListeners';
-import { initPassivePractice } from '../practice/passive/main';
+import { initPassivePractice, initPassivePracticeOnFirstLaunch } from '../practice/passive/main';
 import { initAppTray } from '../tray/initAppTray';
 import { initTrayWindowListeners } from '../tray/windowListeners';
 
@@ -22,11 +21,11 @@ const APP_CONFIG = {
 
 export const closeApp = () => app.quit();
 
-export const createAppConfig = () => {
+const createAppConfig = () => {
   writeFile(buildPathFromRoot("appConfig.json"), JSON.stringify(APP_CONFIG));
 };
 
-export const checkAppFirstLaunch = () => existsSync(buildPathFromRoot("appConfig.json")) ? false : true;
+const checkAppFirstLaunch = () => existsSync(buildPathFromRoot("appConfig.json")) ? false : true;
 
 /**
  * runs before app ready 
@@ -34,9 +33,11 @@ export const checkAppFirstLaunch = () => existsSync(buildPathFromRoot("appConfig
 export const appLaunchPreparer = async () => {
   let openAppWindowAtStart: boolean;
 
+  // on app first run
   if (checkAppFirstLaunch()) {
     openAppWindowAtStart = true;
     appFirstLaunchSetup();
+    // app not first time run
   } else {
     ({ openAppWindowAtStart } = (await getAppSettingsData()).basic);
     appNotFirstLaunchSetup();
@@ -47,20 +48,20 @@ export const appLaunchPreparer = async () => {
   return openAppWindowAtStart;
 };
 
-export const appFirstLaunchSetup = () => {
+const appFirstLaunchSetup = () => {
   createAppConfig();
+  initPassivePracticeOnFirstLaunch();
 };
 
-export const appNotFirstLaunchSetup = () => {
+const appNotFirstLaunchSetup = () => {
   initPassivePractice();
 };
 
 /**
  * runs anyway on app start
  */
-export const appGeneralSetup = () => {
+const appGeneralSetup = () => {
   createErrorLogFolder();
-  initUtilsWithCatchSetup();
   initRenderersErrorListeners();
   initWindowInstanceRegistry();
   initWebDBListeners();

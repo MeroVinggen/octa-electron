@@ -1,11 +1,11 @@
 import { ipcMain } from 'electron';
 import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowInstanceRegistry';
-import { AppSettings, Word, YearData } from '../../DB/interface';
-import { utilsWithCatch } from '../../DB/utilsWithCatch';
+import { Word, YearData } from '../../DB/interface';
+import { getAppSettingsData, onAddWord, updateStatistic } from '../../DB/utils';
 import { sendToMainWindowNewPassivePracticeResult } from '../../mainWindow/windowMessaging';
 
 const getNotificationSetting = async (e: Electron.IpcMainEvent) => {
-  const appSettings = await utilsWithCatch.get("getAppSettingsData")!() as AppSettings;
+  const appSettings = await getAppSettingsData();
   e.reply("getNotificationSetting", appSettings.practice.passive.soundNotification);
 };
 
@@ -20,8 +20,8 @@ const onPassivePracticeResult = (e: Electron.IpcMainEvent, result: boolean, word
 
 // if main win is closed - update by passivePractice win
 const onUpdateDBWithPracticeResult = (_, updatedWord: Word, updatedCurYearData: YearData) => {
-  utilsWithCatch.get("onAddWord")!(updatedWord);
-  utilsWithCatch.get("updateStatistic")!(updatedCurYearData);
+  onAddWord(updatedWord);
+  updateStatistic(updatedCurYearData);
   windowInstanceRegistry.get("passivePractice")!.close();
 };
 

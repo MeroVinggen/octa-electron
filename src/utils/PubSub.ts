@@ -1,6 +1,6 @@
 type Subscriber = (action: string, data?: unknown) => void;
 
-export class Observer {
+export class PubSub {
   private subscribers: Array<Subscriber>;
 
   constructor() {

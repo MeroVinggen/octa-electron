@@ -1,49 +1,47 @@
 import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowInstanceRegistry';
 import { WEEK_DAY_BY_INDEX, toMilliseconds } from '../../../utils/helpers';
-import { desktopDBObserver } from '../../DB/desktopDBObserver';
 import { PracticeSettings, TimeFrame, WEEK_DAYS_SHORTS_TYPE } from '../../DB/interface';
-import { getAppSettingsData } from '../../DB/utils';
-import { utilsWithCatch } from '../../DB/utilsWithCatch';
+import { checkDictionaryIsEmpty, getAppSettingsData } from '../../DB/utils';
+import { updateCurrentPassivePracticeDataSnapshot } from './currentPassivePracticeDataSnapshot';
 import { createPassivePracticeWindow } from './windowCreation';
 
-let currentPassivePracticeDataSnapshot: string;
 let actualTimeFrames: TimeFrame[];
 let currentTimeFrame: TimeFrame;
 let interval: number;
 let passivePracticeTimeFrameTimerId: NodeJS.Timeout;
 let passivePracticeIntervalTimerId: NodeJS.Timeout;
 
-const getCurrentPassivePracticeDataSnapshot = () => currentPassivePracticeDataSnapshot;
-
-const stopCurrentPassivePracticeTimers = () => {
+export const stopCurrentPassivePracticeTimers = () => {
+  console.log("stopCurrentPassivePracticeTimers");
   clearTimeout(passivePracticeTimeFrameTimerId);
   clearTimeout(passivePracticeIntervalTimerId);
 };
 
-const reInitPassivePractice = () => {
+export const reInitPassivePractice = (passivePracticeData: PracticeSettings) => {
   stopCurrentPassivePracticeTimers();
   windowInstanceRegistry.get("passivePractice")!.close();
-  setupPassivePractice();
+  setupPassivePractice(passivePracticeData);
 };
 
-export const setupPassivePractice = async () => {
-  const passivePracticeData = (await getAppSettingsData()).practice.passive;
-  currentPassivePracticeDataSnapshot = JSON.stringify(passivePracticeData);
+export const setupPassivePractice = async (passivePracticeData?: PracticeSettings) => {
+  const currentPassivePracticeData = passivePracticeData || (await getAppSettingsData()).practice.passive;
 
-  if (!passivePracticeData.enabled) {
+  updateCurrentPassivePracticeDataSnapshot(currentPassivePracticeData);
+
+  if (!currentPassivePracticeData.enabled) {
     return;
   }
 
   const currentDate = new Date();
   const currentDayKey = WEEK_DAY_BY_INDEX[(currentDate).getDay()];
-  const currentDayHasPassivePractice = currentDayKey in passivePracticeData.daySettings;
+  const currentDayHasPassivePractice = currentDayKey in currentPassivePracticeData.daySettings;
 
   // no current day key in passive practice settings
   if (!currentDayHasPassivePractice) {
     return;
   }
 
-  const currentInterval = getActualTimeFrames(passivePracticeData, currentDayKey, currentDate);
+  const currentInterval = getActualTimeFrames(currentPassivePracticeData, currentDayKey, currentDate);
 
   // if days settings are enabled, but no timeFrames added
   if (actualTimeFrames.length === 0) {
@@ -128,7 +126,7 @@ const onPassivePracticeIntervalTick = () => {
 };
 
 const callPassivePractice = async () => {
-  const vocabularyIsEmpty = await utilsWithCatch.get("checkDictionaryIsEmpty")!();
+  const vocabularyIsEmpty = await checkDictionaryIsEmpty();
 
   if (vocabularyIsEmpty) {
     return;
@@ -155,50 +153,4 @@ const afterCallPassivePractice = () => {
     // set timer to next timeFrame
     setNextPassivePracticeTimeFrameTimer();
   }
-};
-
-/* -------------------------------------------------------------------------- */
-/*                         setup desktop DB listeners                         */
-/* -------------------------------------------------------------------------- */
-
-const updateAppSettings = async () => {
-  const oldPassivePracticeData = getCurrentPassivePracticeDataSnapshot();
-  const newPassivePracticeData = JSON.stringify((await getAppSettingsData()).practice.passive);
-
-  const isChangedPassivePracticeData = newPassivePracticeData !== oldPassivePracticeData;
-  
-  if (isChangedPassivePracticeData) {
-    reInitPassivePractice();
-  }
-};
-
-let updateAppSettingsWithDebounceTimerID: NodeJS.Timeout;
-
-// 30s
-let updateAppSettingsWithDebounceTimerTimeout = 5_000;
-
-const updateAppSettingsWithDebounce = () => {
-  clearTimeout(updateAppSettingsWithDebounceTimerID);
-  updateAppSettingsWithDebounceTimerID = setTimeout(
-    updateAppSettings, 
-    updateAppSettingsWithDebounceTimerTimeout
-  );
-};
-
-const appDBObserverListeners = {
-  updateAppSettings: updateAppSettingsWithDebounce,
-  clearAppSettings: stopCurrentPassivePracticeTimers,
-} as const;
-
-/**
- * listening desktop DB for passive practice settings update
- */
-export const initPassivePracticeDesktopDBObserverListeners = () => {
-  desktopDBObserver.subscribe((action) => {
-    if (action in appDBObserverListeners) {
-      appDBObserverListeners[action]();
-    } else {
-      throw new Error("Unknown desktopDBObserver command - " + action);
-    }
-  });
 };

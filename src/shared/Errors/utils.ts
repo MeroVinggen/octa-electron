@@ -23,15 +23,6 @@ export const recordError = (err, path: string) =>
   appendFile(path, `${String(new Date().toDateString())} - ${err}\n`)
     .catch((err) => console.log(err));
 
-export const RunPromiseWithCatch = async<T extends (...args: any) => any>(func: T, params: unknown[]): Promise<ReturnType<T> | undefined> => {
-  try {
-    return await func(...params);
-  } catch (err) {
-    recordError(err, IPC_MAIN_ERROR_FILE_PATH);
-    showErrorWindow("Run promise with catch fail: " + err);
-  }
-};
-
 export const showErrorWindow = (error: string) => {
   addErrorMsg(error);
   

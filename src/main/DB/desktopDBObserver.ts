@@ -1,6 +1,6 @@
-import { Observer } from '../../utils/Observer';
+import { PubSub } from '../../utils/PubSub';
 
 /**
  * broadcast desktop DB (ipcMain) changes (after applying)
  */
-export const desktopDBObserver = new Observer();
+export const desktopDBObserver = new PubSub();

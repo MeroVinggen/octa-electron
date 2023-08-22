@@ -1,31 +1,38 @@
 import { desktopDB } from './desktopDB';
 import { desktopDBObserver } from './desktopDBObserver';
-import { Word } from './interface';
+import { AppSettings, Word } from './interface';
 
-// add & edit word
 export const onAddWord = async (word: Word) => {
   await desktopDB.push(`/dictionary/${word.id}`, word);
 };
 
-export const onDeleteWord = async (wordId) => {
+export const onEditWord = async (word: Word) => {
+  await onAddWord(word);
+  desktopDBObserver.broadcast("onEditWord", word.id);
+};
+
+export const onDeleteWord = async (wordId: Word["id"]) => {
   await desktopDB.delete(`/dictionary/${wordId}`);
+  desktopDBObserver.broadcast("onDeleteWord", wordId);
 };
 
 export const onDictionaryClear = async () => {
-  await desktopDB.delete(`/dictionary`);
+  await desktopDB.delete("/dictionary");
+  desktopDBObserver.broadcast("onDictionaryClear");
 };
 
 export const getDictionaryData = async () => {
-  return desktopDB.getData(`/dictionary`);
+  return desktopDB.getData("/dictionary");
 };
 
 /**
- * returns `true` if ot's empty, otherwise `false`
+ * returns `true` if it's empty, otherwise `false`
  */
-export const checkDictionaryIsEmpty = async () => {
-  return desktopDB.getData(`/dictionary`)
-    .then((data) => Object.keys(data).length === 0);
-};
+export const checkDictionaryIsEmpty = async () =>
+  desktopDB.getData("/dictionary")
+    .then((data) => Object.keys(data).length === 0)
+    // if can't read '/dictionary' it means it's empty
+    .catch(() => true);
 
 export const onStatisticClear = async () => {
   await desktopDB.delete('/statistic');
@@ -52,8 +59,8 @@ export const onAppSettingsClear = async () => {
   desktopDBObserver.broadcast("clearAppSettings");
 };
 
-export const getAppSettingsData = async () => {
-  return desktopDB.getData(`/appSettings`);
+export const getAppSettingsData = async (): Promise<AppSettings> => {
+  return desktopDB.getData("/appSettings");
 };
 
 type Rows = Word & {

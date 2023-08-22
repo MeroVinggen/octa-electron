@@ -2,7 +2,7 @@ import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInst
 import { createMainWindow } from './windowCreation';
 
 /**
- * creating new main window instance if it's closed 
+ * creating new main window if it's closed 
  * or focus if it's opened
  */
 export const openMainWindow = () => {

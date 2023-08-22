@@ -1,23 +1,23 @@
 import { ipcMain } from 'electron';
-import { utilsWithCatch } from './utilsWithCatch';
+import { importAppDBData, onAddWord, onAppSettingsClear, onDeleteWord, onDictionaryClear, onEditWord, onStatisticClear, updateAppSettingsData, updatePracticeData, updateStatistic } from './utils';
 
 let webDBListeners: { [key: string]: Function; };
 
 const setupListenersList = () => {
   webDBListeners = {
-    onAddWord: utilsWithCatch.get("onAddWord")!,
-    onEditWord: utilsWithCatch.get("onAddWord")!,
-    onDeleteWord: utilsWithCatch.get("onDeleteWord")!,
-    onDictionaryClear: utilsWithCatch.get("onDictionaryClear")!,
-    initStatisticData: utilsWithCatch.get("updateStatistic")!,
-    onStatisticClear: utilsWithCatch.get("onStatisticClear")!,
-    initPracticeData: utilsWithCatch.get("updatePracticeData")!,
-    updatePracticeData: utilsWithCatch.get("updatePracticeData")!,
-    updateStatistic: utilsWithCatch.get("updateStatistic")!,
-    initAppSettingsData: utilsWithCatch.get("updateAppSettingsData")!,
-    updateAppSettingsData: utilsWithCatch.get("updateAppSettingsData")!,
-    onAppSettingsClear: utilsWithCatch.get("onAppSettingsClear")!,
-    importAppDBData: utilsWithCatch.get("importAppDBData")!,
+    onAddWord,
+    onEditWord,
+    onDeleteWord,
+    onDictionaryClear,
+    initStatisticData: updateStatistic,
+    onStatisticClear,
+    initPracticeData: updatePracticeData,
+    updatePracticeData,
+    updateStatistic,
+    initAppSettingsData: updateAppSettingsData,
+    updateAppSettingsData,
+    onAppSettingsClear,
+    importAppDBData,
   };
 };
 
