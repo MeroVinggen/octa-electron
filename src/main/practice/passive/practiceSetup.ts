@@ -12,7 +12,6 @@ let passivePracticeTimeFrameTimerId: NodeJS.Timeout;
 let passivePracticeIntervalTimerId: NodeJS.Timeout;
 
 export const stopCurrentPassivePracticeTimers = () => {
-  console.log("stopCurrentPassivePracticeTimers");
   clearTimeout(passivePracticeTimeFrameTimerId);
   clearTimeout(passivePracticeIntervalTimerId);
 };
