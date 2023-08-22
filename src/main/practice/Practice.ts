@@ -12,7 +12,7 @@ export class Practice {
   timeFrameTimerId!: NodeJS.Timeout;
   intervalTimerId!: NodeJS.Timeout;
   windowInstanceID: WindowNames;
-  settingsSnapshot = new PracticeSettingsSnapshot();
+  settingsSnapshot: PracticeSettingsSnapshot;
   windowCreator: Function;
   practiceKey: PracticeVariants;
 
@@ -24,6 +24,7 @@ export class Practice {
     this.windowInstanceID = windowInstanceID;
     this.windowCreator = windowCreator;
     this.practiceKey = practiceKey;
+    this.settingsSnapshot = new PracticeSettingsSnapshot();
   }
 
   stopCurrentTimers() {
