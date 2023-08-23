@@ -148,8 +148,12 @@ export class Practice {
       return;
     }
 
-    if (windowInstanceRegistry.get(this.windowInstanceID)!.getIsClosed()) {
+    const windowInstance = windowInstanceRegistry.get(this.windowInstanceID)!;
+
+    if (windowInstance.getIsClosed()) {
       this.windowCreator();
+    } else {
+      windowInstance.getWin()!.webContents.send("intervalTick");
     }
   };
 
