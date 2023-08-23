@@ -21,7 +21,7 @@ export const createErrorLogFolder = () => {
 };
 
 export const recordError = (err, path: string) =>
-  appendFile(path, `${String(new Date().toDateString())} - ${err}\n`)
+  appendFile(path, `\n${String(new Date().toDateString())} - ${err}\n`)
     .catch((err) => console.log(err));
 
 export const showErrorWindow = (error: string) => {
