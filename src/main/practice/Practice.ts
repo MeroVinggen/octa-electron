@@ -27,12 +27,12 @@ export class Practice {
     this.settingsSnapshot = new PracticeSettingsSnapshot();
   }
 
-  stopCurrentTimers() {
+  stopCurrentTimers = () => {
     clearTimeout(this.timeFrameTimerId);
     clearTimeout(this.intervalTimerId);
   };
 
-  reInit(practiceData: PracticeSettings) {
+  private reInit(practiceData: PracticeSettings) {
     this.stopCurrentTimers();
     windowInstanceRegistry.get(this.windowInstanceID)!.close();
     this.setup(practiceData);
@@ -168,6 +168,18 @@ export class Practice {
     } else {
       // set timer to next timeFrame
       this.setNextTimeFrameTimer();
+    }
+  };
+
+  updateAppSettings = async () => {
+    const oldActivePracticeDataString = this.settingsSnapshot.getSnapshot();
+    const newActivePracticeData = (await getAppSettingsData()).practice.active;
+    const newActivePracticeDataString = JSON.stringify(newActivePracticeData);
+
+    const isChangedActivePracticeData = newActivePracticeDataString !== oldActivePracticeDataString;
+
+    if (isChangedActivePracticeData) {
+      this.reInit(newActivePracticeData);
     }
   };
 }

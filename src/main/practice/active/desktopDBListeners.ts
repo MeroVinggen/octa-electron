@@ -1,36 +1,13 @@
+import { createDebounce } from '../../../utils/helpers';
 import { desktopDBObserver } from '../../DB/desktopDBObserver';
-import { getAppSettingsData } from '../../DB/utils';
 import { activePractice } from './main';
 
-const updateAppSettings = async () => {
-  const oldActivePracticeDataString = activePractice.settingsSnapshot.getSnapshot();
-  const newActivePracticeData = (await getAppSettingsData()).practice.active;
-  const newActivePracticeDataString = JSON.stringify(newActivePracticeData);
-
-  const isChangedActivePracticeData = newActivePracticeDataString !== oldActivePracticeDataString;
-
-  if (isChangedActivePracticeData) {
-    activePractice.reInit(newActivePracticeData);
-  }
-};
-
-let updateAppSettingsWithDebounceTimerID: NodeJS.Timeout;
-
 // 30s
-// let updateAppSettingsWithDebounceTimerTimeout = 30_000;
-let updateAppSettingsWithDebounceTimerTimeout = 5_000;
-
-const updateAppSettingsWithDebounce = () => {
-  clearTimeout(updateAppSettingsWithDebounceTimerID);
-  updateAppSettingsWithDebounceTimerID = setTimeout(
-    updateAppSettings,
-    updateAppSettingsWithDebounceTimerTimeout
-  );
-};
+const updateAppSettingsWithDebounce = createDebounce(activePractice.updateAppSettings, 30_000);
 
 const appDBObserverListeners = {
   updateAppSettings: updateAppSettingsWithDebounce,
-  clearAppSettings: () => activePractice.stopCurrentTimers(),
+  clearAppSettings: activePractice.stopCurrentTimers,
 } as const;
 
 /**

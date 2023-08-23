@@ -15,3 +15,11 @@ export const toMilliseconds = ({ h = 0, m = 0, s = 0 }: { h?: number, m?: number
 export const ROOT_PATH = resolve('./');
 
 export const buildPathFromRoot = (...paths: string[]) => join(ROOT_PATH, ...paths);
+
+export const createDebounce = (callback: (...params: unknown[]) => unknown, timeout: number) => {
+  let timerID: NodeJS.Timeout;
+  return (...params: unknown[]) => {
+    clearTimeout(timerID);
+    timerID = setTimeout(callback, timeout, ...params);
+  };
+};
