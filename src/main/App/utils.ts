@@ -15,12 +15,15 @@ import { initPassivePractice, initPassivePracticeOnFirstLaunch } from '../practi
 import { initAppTray } from '../tray/initAppTray';
 import { initTrayWindowListeners } from '../tray/windowListeners';
 import { initActivePractice, initActivePracticeOnFirstLaunch } from '../practice/active/main';
+import { initAutoLauncher } from '../autoLaunch/main';
 
 const APP_CONFIG = {
   firstLaunch: false
 };
 
 export const closeApp = () => app.quit();
+
+export const getAppExePath = () => app.getPath('exe');
 
 const createAppConfig = () => {
   writeFile(buildPathFromRoot("appConfig.json"), JSON.stringify(APP_CONFIG));
@@ -72,6 +75,7 @@ const appGeneralSetup = () => {
   initIpcMainErrorHandlers();
   initMainWindowListeners();
   initTrayWindowListeners();
+  initAutoLauncher();
 };
 
 type OnAppReadyProps = {

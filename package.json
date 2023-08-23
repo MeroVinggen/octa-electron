@@ -18,11 +18,13 @@
   "dependencies": {
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^1.0.2",
+    "auto-launch": "^5.0.6",
     "node-json-db": "^2.2.0"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron/notarize": "^1.2.3",
+    "@types/auto-launch": "^5.0.2",
     "@types/node": "^18.16.19",
     "electron": "^24.6.2",
     "electron-builder": "^23.6.0",
