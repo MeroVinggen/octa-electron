@@ -14,6 +14,7 @@ import { initMainWindowListeners } from '../mainWindow/windowListeners';
 import { initPassivePractice, initPassivePracticeOnFirstLaunch } from '../practice/passive/main';
 import { initAppTray } from '../tray/initAppTray';
 import { initTrayWindowListeners } from '../tray/windowListeners';
+import { initActivePractice, initActivePracticeOnFirstLaunch } from '../practice/active/main';
 
 const APP_CONFIG = {
   firstLaunch: false
@@ -51,10 +52,12 @@ export const appLaunchPreparer = async () => {
 const appFirstLaunchSetup = () => {
   createAppConfig();
   initPassivePracticeOnFirstLaunch();
+  initActivePracticeOnFirstLaunch();
 };
 
 const appNotFirstLaunchSetup = () => {
   initPassivePractice();
+  initActivePractice();
 };
 
 /**

@@ -1,1 +1,1 @@
-export type WindowNames = "main" | "passivePractice" | "error" | "tray";
+export type WindowNames = "main" | "passivePractice" | "activePractice" | "error" | "tray";

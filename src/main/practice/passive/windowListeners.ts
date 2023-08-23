@@ -6,7 +6,7 @@ import { sendToMainWindowNewPassivePracticeResult } from '../../mainWindow/windo
 
 const getNotificationSetting = async (e: Electron.IpcMainEvent) => {
   const appSettings = await getAppSettingsData();
-  e.reply("getNotificationSetting", appSettings.practice.passive.soundNotification);
+  e.reply("getPassiveNotificationSetting", appSettings.practice.passive.soundNotification);
 };
 
 const onPassivePracticeResult = (e: Electron.IpcMainEvent, result: boolean, word: Word, practiceTarget: "original" | "translation") => {
