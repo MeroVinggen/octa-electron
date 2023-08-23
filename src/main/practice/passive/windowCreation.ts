@@ -21,13 +21,16 @@ export const createPassivePracticeWindow = () => {
       height: 600,
       width: 400,
       show: false,
+      frame: false,
+      resizable: false,
+      transparent: true,
       icon: appIconURL,
       webPreferences: {
         preload: join(__dirname, '../preload/passivePracticeWindow/main.js'),
         sandbox: false,
         devTools: is.dev,
       }
-    },
+    }, 
     sourceLoader: passivePracticeWindowSourceLoader,
     listeners: [
       {

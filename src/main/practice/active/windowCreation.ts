@@ -18,11 +18,12 @@ export const createActivePracticeWindow = () => {
 
   const win = createWindow({
     windowSettings: {
-      height: 300,
+      height: 170,
       width: 400,
       show: false,
       frame: false,
       resizable: false,
+      transparent: true,
       icon: appIconURL,
       webPreferences: {
         preload: join(__dirname, '../preload/activePracticeWindow/main.js'),
