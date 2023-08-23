@@ -29,26 +29,34 @@ const onDictionaryClear = () => {
   windowInstanceRegistry.get("passivePractice")!.close();
 };
 
-// 30s
-const updateAppSettingsWithDebounce = createDebounce(passivePractice.updateAppSettings, 30_000);
+let appDBObserverListeners: {
+  onEditWord: (data: any) => void;
+  onDeleteWord: (data: any) => void;
+  onDictionaryClear: () => void;
+  updateAppSettings: (...params: unknown[]) => void;
+  clearAppSettings: () => void;
+};
 
-const appDBObserverListeners = {
-  onEditWord: (data) => proceedIfPassivePracticeWindowNotClosed(onEditWord, data),
-  onDeleteWord: (data) => proceedIfPassivePracticeWindowNotClosed(onDeleteWord, data),
-  onDictionaryClear,
-  updateAppSettings: updateAppSettingsWithDebounce,
-  clearAppSettings: passivePractice.stopCurrentTimers,
-} as const;
+const initAppDBObserverListeners = () => {
+  appDBObserverListeners = {
+    onEditWord: (data) => proceedIfPassivePracticeWindowNotClosed(onEditWord, data),
+    onDeleteWord: (data) => proceedIfPassivePracticeWindowNotClosed(onDeleteWord, data),
+    onDictionaryClear,
+    // 30s
+    updateAppSettings: createDebounce(passivePractice.updateAppSettings, 30_000),
+    clearAppSettings: passivePractice.stopCurrentTimers,
+  };
+};
 
 /**
  * listening desktop DB for passive practice settings update
  */
 export const initPassivePracticeDesktopDBObserverListeners = () => {
+  initAppDBObserverListeners();
+  
   desktopDBObserver.subscribe((action, data) => {
     if (action in appDBObserverListeners) {
       appDBObserverListeners[action](data);
-    } else {
-      throw new Error("Unknown desktopDBObserver command - " + action);
     }
   });
 };

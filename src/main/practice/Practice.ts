@@ -176,14 +176,14 @@ export class Practice {
   };
 
   updateAppSettings = async () => {
-    const oldActivePracticeDataString = this.settingsSnapshot.getSnapshot();
-    const newActivePracticeData = (await getAppSettingsData()).practice.active;
-    const newActivePracticeDataString = JSON.stringify(newActivePracticeData);
+    const oldPracticeDataString = this.settingsSnapshot.getSnapshot();
+    const newPracticeData = (await getAppSettingsData()).practice[this.practiceKey];
+    const newPracticeDataString = JSON.stringify(newPracticeData);
 
-    const isChangedActivePracticeData = newActivePracticeDataString !== oldActivePracticeDataString;
+    const isChangedPracticeData = newPracticeDataString !== oldPracticeDataString;
 
-    if (isChangedActivePracticeData) {
-      this.reInit(newActivePracticeData);
+    if (isChangedPracticeData) {
+      this.reInit(newPracticeData);
     }
   };
 }

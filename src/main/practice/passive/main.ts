@@ -5,8 +5,12 @@ import { initWindowListeners } from './windowListeners';
 
 export let passivePractice: Practice;
 
-export const initPassivePractice = () => {
+const initPassivePracticeInstance = () => {
   passivePractice = new Practice("passivePractice", createPassivePracticeWindow, "passive");
+};
+
+export const initPassivePractice = () => {
+  initPassivePracticeInstance();
   initWindowListeners();
   initPassivePracticeDesktopDBObserverListeners();
   passivePractice.setup();
@@ -16,6 +20,7 @@ export const initPassivePractice = () => {
  * not calling passive practice setup
  */
 export const initPassivePracticeOnFirstLaunch = () => {
+  initPassivePracticeInstance();
   initWindowListeners();
   initPassivePracticeDesktopDBObserverListeners();
 };
