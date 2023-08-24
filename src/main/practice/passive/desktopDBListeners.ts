@@ -36,6 +36,6 @@ export const initPassivePracticeDesktopDBObserverListeners = () => {
   desktopDBPubSub.subscribe("onEditWord", (data) => proceedIfPassivePracticeWindowNotClosed(onEditWord, data));
   desktopDBPubSub.subscribe("onDeleteWord", (data) => proceedIfPassivePracticeWindowNotClosed(onDeleteWord, data));
   desktopDBPubSub.subscribe("onDictionaryClear", onDictionaryClear);
-  desktopDBPubSub.subscribe("updateAppSettings", createDebounce(passivePractice.updateAppSettings, 1_000));
+  desktopDBPubSub.subscribe("updateAppSettings", createDebounce(passivePractice.updateAppSettings, 30_000));
   desktopDBPubSub.subscribe("clearAppSettings", passivePractice.stopCurrentTimers);
 };

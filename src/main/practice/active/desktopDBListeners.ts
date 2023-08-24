@@ -22,6 +22,6 @@ const onDeleteWord = async () => {
  */
 export const initActivePracticeDesktopDBObserverListeners = () => {
   desktopDBPubSub.subscribe("onDeleteWord", (data) => proceedIfActivePracticeWindowNotClosed(onDeleteWord, data));
-  desktopDBPubSub.subscribe("updateAppSettings", createDebounce(activePractice.updateAppSettings, 1_000));
+  desktopDBPubSub.subscribe("updateAppSettings", createDebounce(activePractice.updateAppSettings, 30_000));
   desktopDBPubSub.subscribe("clearAppSettings", activePractice.stopCurrentTimers);
 };

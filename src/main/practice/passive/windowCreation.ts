@@ -22,6 +22,7 @@ export const createPassivePracticeWindow = () => {
       width: 400,
       show: false,
       frame: false,
+      hasShadow: true,
       resizable: false,
       transparent: true,
       icon: appIconURL,
