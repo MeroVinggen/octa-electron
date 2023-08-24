@@ -46,5 +46,7 @@ export const createMainWindow = () => {
     ]
   });
 
+  win.webContents.session.setSpellCheckerLanguages(['en-US', 'ru'])
+
   winRegistryInstance.setWin(win);
 };
