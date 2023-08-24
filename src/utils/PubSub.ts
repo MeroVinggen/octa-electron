@@ -1,21 +1,21 @@
-type Subscriber = (action: string, data?: unknown) => void;
-
 export class PubSub {
-  private subscribers: Array<Subscriber>;
+  channels: { [key: string]: Set<Function>; } = {};
 
-  constructor() {
-    this.subscribers = [];
+  publish(channel: string, ...params: unknown[]): void {
+    if (this.channels[channel] === undefined) { return; }
+    this.channels[channel].forEach((handler) => {
+      handler(...params);
+    });
   }
 
-  public subscribe(callback: Subscriber) {
-    this.subscribers.push(callback);
+  subscribe(channel: string, handler: Function) {
+    if (this.channels[channel] === undefined) {
+      this.channels[channel] = new Set();
+    }
+    this.channels[channel].add(handler);
   }
 
-  public unsubscribe(callback: Subscriber) {
-    this.subscribers = this.subscribers.filter((subscriber) => subscriber !== callback);
-  }
-
-  public broadcast(action: string, data?: unknown) {
-    this.subscribers.forEach((callback) => callback(action, data));
+  unsubscribe(channel: string, handler: Function) {
+    this.channels[channel].delete(handler);
   }
 };

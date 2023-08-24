@@ -1,5 +1,5 @@
 import { desktopDB } from './desktopDB';
-import { desktopDBObserver } from './desktopDBObserver';
+import { desktopDBPubSub } from './desktopDBPubSub';
 import { AppSettings, Word } from './interface';
 
 export const onAddWord = async (word: Word) => {
@@ -8,17 +8,17 @@ export const onAddWord = async (word: Word) => {
 
 export const onEditWord = async (word: Word) => {
   await onAddWord(word);
-  desktopDBObserver.broadcast("onEditWord", word.id);
+  desktopDBPubSub.publish("onEditWord", word.id);
 };
 
 export const onDeleteWord = async (wordId: Word["id"]) => {
   await desktopDB.delete(`/dictionary/${wordId}`);
-  desktopDBObserver.broadcast("onDeleteWord", wordId);
+  desktopDBPubSub.publish("onDeleteWord", wordId);
 };
 
 export const onDictionaryClear = async () => {
   await desktopDB.delete("/dictionary");
-  desktopDBObserver.broadcast("onDictionaryClear");
+  desktopDBPubSub.publish("onDictionaryClear");
 };
 
 export const getDictionaryData = async () => {
@@ -51,12 +51,12 @@ export const updatePracticeData = async (practiceData) => {
 // init & update
 export const updateAppSettingsData = async (appSettingsData) => {
   await desktopDB.push('/appSettings', appSettingsData);
-  desktopDBObserver.broadcast("updateAppSettings");
+  desktopDBPubSub.publish("updateAppSettings");
 };
 
 export const onAppSettingsClear = async () => {
   await desktopDB.delete('/appSettings');
-  desktopDBObserver.broadcast("clearAppSettings");
+  desktopDBPubSub.publish("clearAppSettings");
 };
 
 export const getAppSettingsData = async (): Promise<AppSettings> => {

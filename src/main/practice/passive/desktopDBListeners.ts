@@ -1,6 +1,6 @@
 import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowInstanceRegistry';
 import { createDebounce } from '../../../utils/helpers';
-import { desktopDBObserver } from '../../DB/desktopDBObserver';
+import { desktopDBPubSub } from '../../DB/desktopDBPubSub';
 import { Word } from '../../DB/interface';
 import { checkDictionaryIsEmpty } from '../../DB/utils';
 import { passivePractice } from './main';
@@ -29,34 +29,13 @@ const onDictionaryClear = () => {
   windowInstanceRegistry.get("passivePractice")!.close();
 };
 
-let appDBObserverListeners: {
-  onEditWord: (data: any) => void;
-  onDeleteWord: (data: any) => void;
-  onDictionaryClear: () => void;
-  updateAppSettings: (...params: unknown[]) => void;
-  clearAppSettings: () => void;
-};
-
-const initAppDBObserverListeners = () => {
-  appDBObserverListeners = {
-    onEditWord: (data) => proceedIfPassivePracticeWindowNotClosed(onEditWord, data),
-    onDeleteWord: (data) => proceedIfPassivePracticeWindowNotClosed(onDeleteWord, data),
-    onDictionaryClear,
-    // 30s
-    updateAppSettings: createDebounce(passivePractice.updateAppSettings, 30_000),
-    clearAppSettings: passivePractice.stopCurrentTimers,
-  };
-};
-
 /**
  * listening desktop DB for passive practice settings update
  */
 export const initPassivePracticeDesktopDBObserverListeners = () => {
-  initAppDBObserverListeners();
-  
-  desktopDBObserver.subscribe((action, data) => {
-    if (action in appDBObserverListeners) {
-      appDBObserverListeners[action](data);
-    }
-  });
+  desktopDBPubSub.subscribe("onEditWord", (data) => proceedIfPassivePracticeWindowNotClosed(onEditWord, data));
+  desktopDBPubSub.subscribe("onDeleteWord", (data) => proceedIfPassivePracticeWindowNotClosed(onDeleteWord, data));
+  desktopDBPubSub.subscribe("onDictionaryClear", onDictionaryClear);
+  desktopDBPubSub.subscribe("updateAppSettings", createDebounce(passivePractice.updateAppSettings, 1_000));
+  desktopDBPubSub.subscribe("clearAppSettings", passivePractice.stopCurrentTimers);
 };
