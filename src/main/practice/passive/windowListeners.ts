@@ -4,6 +4,10 @@ import { Word, YearData } from '../../DB/interface';
 import { getAppSettingsData, onAddWord, updateStatistic } from '../../DB/utils';
 import { sendToMainWindowNewPassivePracticeResult } from '../../mainWindow/windowMessaging';
 
+const closePassivePracticeWindow = () => {
+  windowInstanceRegistry.get("passivePractice")!.close();
+};
+
 const getNotificationSetting = async (e: Electron.IpcMainEvent) => {
   const appSettings = await getAppSettingsData();
   e.reply("getPassiveNotificationSetting", appSettings.practice.passive.soundNotification);
@@ -13,7 +17,7 @@ const onPassivePracticeResult = (e: Electron.IpcMainEvent, result: boolean, word
   if (windowInstanceRegistry.get("main")!.getIsClosed()) {
     e.reply("updateDBPracticeResult");
   } else {
-    windowInstanceRegistry.get("passivePractice")!.close();
+    closePassivePracticeWindow();
     sendToMainWindowNewPassivePracticeResult(result, word, practiceTarget);
   }
 };
@@ -22,7 +26,7 @@ const onPassivePracticeResult = (e: Electron.IpcMainEvent, result: boolean, word
 const onUpdateDBWithPracticeResult = (_, updatedWord: Word, updatedCurYearData: YearData) => {
   onAddWord(updatedWord);
   updateStatistic(updatedCurYearData);
-  windowInstanceRegistry.get("passivePractice")!.close();
+  closePassivePracticeWindow();
 };
 
 /**
@@ -33,4 +37,5 @@ export const initWindowListeners = () => {
   ipcMain.on("getNotificationSetting", getNotificationSetting);
   // if main win is closed - update by sended data from passivePractice win
   ipcMain.on("updateDBPracticeResult", onUpdateDBWithPracticeResult);
+  ipcMain.on("closePassivePracticeWindow", closePassivePracticeWindow);
 };
