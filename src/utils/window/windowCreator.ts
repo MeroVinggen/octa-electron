@@ -1,7 +1,7 @@
 import { is } from '@electron-toolkit/utils';
 import { BrowserWindow } from 'electron';
 
-type WindowEvents = "ready-to-show" | "closed" | "show" | "blur";
+type WindowEvents = "ready-to-show" | "closed" | "show" | "blur" | "maximize" | "unmaximize";
 
 type CreateWindowConfig = {
   windowSettings: Electron.BrowserWindowConstructorOptions;

@@ -4,6 +4,7 @@ import { join } from 'path';
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
 import { createWindow } from '../../utils/window/windowCreator';
 import appIconURL from '/resources/octopus-teal.png?asset';
+import { onWindowMaximize, onWindowUnmaximize } from './utils';
 
 const mainWindowSourceLoader = (win: BrowserWindow) => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
@@ -21,6 +22,7 @@ export const createMainWindow = () => {
       height: 700,
       width: 800,
       show: false,
+      frame: false,
       icon: appIconURL,
       webPreferences: {
         preload: join(__dirname, '../preload/mainWindow/main.js'),
@@ -43,6 +45,18 @@ export const createMainWindow = () => {
           () => winRegistryInstance.onClose(),
         ]
       },
+      {
+        event: 'maximize',
+        handlers: [
+          onWindowMaximize,
+        ]
+      },
+      {
+        event: 'unmaximize',
+        handlers: [
+          onWindowUnmaximize,
+        ]
+      }
     ]
   });
 
