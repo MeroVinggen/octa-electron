@@ -8,12 +8,12 @@ export const closeTrayWindow = () => {
 };
 
 export const getTrayWinCoord = (mouseCoord: number, trayWinSize: number, screenSize: number) => {
-  // 50 - offset from screen edge
-  const isTrayWinFitsInScreen = mouseCoord + trayWinSize < screenSize - 50;
+  // 55 = 50 offset from screen edge + 5 shift from mouse
+  const isTrayWinFitsInScreen = mouseCoord + trayWinSize + 55 < screenSize;
 
   if (isTrayWinFitsInScreen) {
-    return mouseCoord;
+    return mouseCoord + 5;
   }
 
-  return screenSize - trayWinSize - 10;
+  return mouseCoord - trayWinSize - 5;
 };

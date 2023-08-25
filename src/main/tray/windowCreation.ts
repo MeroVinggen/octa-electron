@@ -5,8 +5,8 @@ import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInst
 import { createWindow } from '../../utils/window/windowCreator';
 
 const trayWindowSizes = { 
-  height: 100,
-  width: 180,
+  height: 65,
+  width: 160,
 };
 
 export const getTrayWindowSizes = () => ({ ...trayWindowSizes });
