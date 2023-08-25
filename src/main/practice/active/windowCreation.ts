@@ -20,8 +20,8 @@ export const createActivePracticeWindow = () => {
   const win = createWindow({
     windowSettings: {
       height: 90,
-      width: 300,
-      x: width - 310, // 10px - screen edge margin
+      width: 280,
+      x: width - 290, // 10px - screen edge margin
       y: height / 2 - 45,
       show: false,
       frame: false,
