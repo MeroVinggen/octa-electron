@@ -21,7 +21,6 @@ export const createErrorWindow = () => {
       width: 700,
       show: false,
       frame: false,
-      hasShadow: true,
       transparent: true,
       resizable: false,
       webPreferences: {

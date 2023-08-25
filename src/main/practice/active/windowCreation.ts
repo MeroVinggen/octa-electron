@@ -1,5 +1,5 @@
 import { is } from '@electron-toolkit/utils';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, screen } from 'electron';
 import { join } from 'path';
 import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowInstanceRegistry';
 import { createWindow } from '../../../utils/window/windowCreator';
@@ -14,17 +14,19 @@ const activePracticePracticeWindowSourceLoader = (win: BrowserWindow) => {
 };
 
 export const createActivePracticeWindow = () => {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   const winRegistryInstance = windowInstanceRegistry.get("activePractice")!;
 
   const win = createWindow({
     windowSettings: {
-      height: 170,
-      width: 400,
+      height: 90,
+      width: 300,
+      x: width - 310, // 10px - screen edge margin
+      y: height / 2 - 45,
       show: false,
       frame: false,
-      hasShadow: true,
+      skipTaskbar: true,
       resizable: false,
-      transparent: true,
       icon: appIconURL,
       webPreferences: {
         preload: join(__dirname, '../preload/activePracticeWindow/main.js'),

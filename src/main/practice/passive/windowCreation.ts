@@ -23,6 +23,7 @@ export const createPassivePracticeWindow = () => {
       show: false,
       frame: false,
       resizable: false,
+      skipTaskbar: true,
       icon: appIconURL,
       webPreferences: {
         preload: join(__dirname, '../preload/passivePracticeWindow/main.js'),
