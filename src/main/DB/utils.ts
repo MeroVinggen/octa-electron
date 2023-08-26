@@ -63,11 +63,11 @@ export const getAppSettingsData = async (): Promise<AppSettings> => {
   return desktopDB.getData("/appSettings");
 };
 
-type Rows = Word & {
+type DictionaryRow = Word & {
   $types: unknown;
 };
 
-const dictionaryDataImport = (rows: Rows[]) => {
+const dictionaryDataImport = (rows: DictionaryRow[]) => {
   // removing unneeded '$types' prop
   rows.forEach(({ $types, ...word }) => onAddWord(word));
 };
@@ -76,12 +76,12 @@ const practiceSettingsDataImport = (rows) => {
   updatePracticeData(rows[0].$[1]);
 };
 
-const statisticDataImport = (rows) => {
-  rows.forEach(updateStatistic);
-};
-
 const appSettingsDataImport = (rows) => {
   updateAppSettingsData(rows[0].$[1]);
+};
+
+const statisticDataImport = (rows: unknown[]) => {
+  rows.forEach(updateStatistic);
 };
 
 const importHandlers = {
@@ -91,14 +91,7 @@ const importHandlers = {
   appSettings: appSettingsDataImport
 };
 
-const parseImportedData = async (file: File) => {
-  const dataArr = JSON.parse(await file.text()).data.data;
-  dataArr.forEach(({ tableName, rows }) => {
-    importHandlers[tableName](rows);
-  });
-};
-
-export const importAppDBData = async (file: File) => {
+export const importAppDBData = async (tableName, rows) => {
   await desktopDB.delete('/');
-  parseImportedData(file);
+  importHandlers[tableName](rows);
 };

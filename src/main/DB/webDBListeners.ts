@@ -28,6 +28,6 @@ export const initWebDBListeners = () => {
   setupListenersList();
 
   Object.entries(webDBListeners).forEach(([key, handler]) => {
-    ipcMain.on(key, (_, data) => handler(data));
+    ipcMain.on(key, (_, ...data) => handler(...data));
   });
 };
