@@ -8,8 +8,7 @@ export type LaunchAppConfig = {
 export const launchApp = async () => {
   await app.whenReady();
 
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.dictionary.mero');
+  electronApp.setAppUserModelId('octa.mero');
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
