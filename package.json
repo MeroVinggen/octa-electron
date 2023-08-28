@@ -1,10 +1,9 @@
 {
-  "name": "octa",
+  "name": "octa-electron",
   "version": "1.0.0",
   "description": "Application to develope your vocabulary",
   "main": "./out/main/index.js",
   "author": "https://github.com/Mero-Plaform",
-  "homepage": "x",
   "scripts": {
     "format": "prettier --write .",
     "start": "electron-vite preview",
