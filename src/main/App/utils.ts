@@ -23,8 +23,6 @@ const APP_CONFIG = {
 
 export const closeApp = () => app.quit();
 
-export const getAppExePath = () => app.getPath('exe');
-
 const createAppConfig = () => {
   writeFile(buildPathFromRoot("appConfig.json"), JSON.stringify(APP_CONFIG));
 };

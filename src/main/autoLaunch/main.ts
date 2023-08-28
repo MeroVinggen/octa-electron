@@ -1,24 +1,22 @@
-import AutoLaunch  from 'auto-launch';
-import { getAppExePath } from '../App/utils';
+import { app } from 'electron';
 import { initAutoLaunchDesktopDBObserverListeners } from './desktopDBListeners';
 
-let octaAutoLauncher: AutoLaunch;
-
 export const initAutoLauncher = () => {
-  octaAutoLauncher = new AutoLaunch({
-    name: 'Octa',
-    path: getAppExePath(),
-  });
-
   initAutoLaunchDesktopDBObserverListeners();
 };
 
 export const enableAutoLaunch = () => {
   if (import.meta.env.PROD) {
-    octaAutoLauncher.enable();
+    app.setLoginItemSettings({
+      openAtLogin: true
+    });
   } else {
-    console.log("auto launch enabled | doesn't work in DEV")
+    console.log("app auto launch enabled | doesn't work in DEV");
   }
-}
+};
 
-export const disableAutoLaunch = () => octaAutoLauncher.disable();
+export const disableAutoLaunch = () => {
+  app.setLoginItemSettings({
+    openAtLogin: false
+  });
+};
