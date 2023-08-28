@@ -25,7 +25,7 @@ export const createMainWindow = () => {
       frame: false,
       icon: appIconURL,
       webPreferences: {
-        preload: join(__dirname, '../preload/mainWindow/main.js'),
+        preload: join(__dirname, '../preload/main.js'),
         sandbox: false,
         devTools: is.dev,
       }

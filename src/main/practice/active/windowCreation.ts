@@ -29,7 +29,7 @@ export const createActivePracticeWindow = () => {
       resizable: false,
       icon: appIconURL,
       webPreferences: {
-        preload: join(__dirname, '../preload/activePracticeWindow/main.js'),
+        preload: join(__dirname, '../preload/main.js'),
         sandbox: false,
         devTools: is.dev,
       }

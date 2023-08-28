@@ -32,7 +32,7 @@ export const createTrayWindow = () => {
       alwaysOnTop: true,
       skipTaskbar: true,
       webPreferences: {
-        preload: join(__dirname, '../preload/trayWindow/main.js'),
+        preload: join(__dirname, '../preload/main.js'),
         sandbox: false,
         devTools: false,
       }
