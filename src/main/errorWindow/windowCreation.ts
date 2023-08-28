@@ -1,8 +1,9 @@
 import { is } from '@electron-toolkit/utils';
-import { type BrowserWindow } from 'electron';
+import { app, screen, type BrowserWindow } from 'electron';
 import { join } from 'path';
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
 import { createWindow } from '../../utils/window/windowCreator';
+import appIconURL from '/resources/octopus-red.png?asset';
 
 const errorWindowSourceLoader = (win: BrowserWindow) => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
@@ -13,16 +14,20 @@ const errorWindowSourceLoader = (win: BrowserWindow) => {
 };
 
 export const createErrorWindow = () => {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   const winRegistryInstance = windowInstanceRegistry.get("error")!;
 
   const win = createWindow({
     windowSettings: {
-      height: 500,
-      width: 700,
+      height: 90,
+      width: 220,
+      x: width - 230, // 10px - screen edge margin
+      y: height / 2 - 45,
       show: false,
       frame: false,
       transparent: true,
       resizable: false,
+      icon: appIconURL,
       webPreferences: {
         preload: join(__dirname, '../preload/errorWindow/main.js'),
         sandbox: false,
@@ -38,6 +43,12 @@ export const createErrorWindow = () => {
           () => winRegistryInstance.onOpen(),
         ]
       },
+      {
+        event: "closed",
+        handlers: [
+          () => app.exit(1)
+        ]
+      }
     ]
   });
 

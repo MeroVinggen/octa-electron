@@ -14,13 +14,11 @@ export const addErrorMsg = (msg: string) => {
   }
 };
 
+// close window proceeds in ipcRendererErrorListeners (entire app close)
+// and error window close event in window creation
 export const initErrorWindowListeners = () => {
   // on window asking for error msg
   ipcMain.on("errorWindowGetError", (e) => {
     e.reply("errorWindowGetError", errorMsgs);
-  });
-  
-  ipcMain.on("errorWindowOkBtnClick", () => {
-    windowInstanceRegistry.get("error")!.close();
   });
 };

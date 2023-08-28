@@ -1,15 +1,12 @@
-import { app } from 'electron';
-import { IPC_MAIN_ERROR_FILE_PATH, recordError } from './utils';
+import { IPC_MAIN_ERROR_FILE_PATH, onError } from './utils';
 
+// app exit proceeding in ipcRendererErrorListeners on error window close
 export const initIpcMainErrorHandlers = () => {
-  process.on('uncaughtException', async (error) => {
-    await recordError((error.message || error) + "\nstack: " + error.stack, IPC_MAIN_ERROR_FILE_PATH);
-    app.exit(1);
+  process.on('uncaughtException', (error) => {
+    onError(error, IPC_MAIN_ERROR_FILE_PATH);
   });
 
   process.on('unhandledRejection', async (error: Error) => {
-    await recordError((error.message || error) + "\nstack: " + error.stack, IPC_MAIN_ERROR_FILE_PATH);
-    app.exit(1);
+    onError(error, IPC_MAIN_ERROR_FILE_PATH);
   });
 };
-

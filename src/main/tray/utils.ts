@@ -1,4 +1,5 @@
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
+import { getTrayInstance } from './initAppTray';
 
 /**
  * hiding tray window (is not closing)
@@ -16,4 +17,8 @@ export const getTrayWinCoord = (mouseCoord: number, trayWinSize: number, screenS
   }
 
   return mouseCoord - trayWinSize - 5;
+};
+
+export const destroyTray = () => {
+  getTrayInstance().destroy();
 };

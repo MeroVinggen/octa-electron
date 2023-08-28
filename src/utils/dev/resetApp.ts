@@ -12,5 +12,5 @@ export const resetApp = async () => {
     (await import("./resetErrorLogs")).resetErrorLogs(),
   ]).catch((err) => console.log(err));
 
-  console.log("App data resetted");
+  console.log("App data reset");
 };

@@ -6,5 +6,5 @@ export const resetAppDB = async () => {
     writeFile(join(resolve("./"), "DB/DesktopDB.json"), "{}"),
   ]).catch((err) => console.log(err));
 
-  console.log("App DB resetted");
+  console.log("App DB reset");
 };

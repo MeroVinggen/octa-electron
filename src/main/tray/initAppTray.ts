@@ -7,6 +7,8 @@ import { getTrayWinCoord } from './utils';
 
 let tray: Electron.CrossProcessExports.Tray;
 
+export const getTrayInstance = () => tray;
+
 export const initAppTray = () => {
   tray = new Tray(appIconURL);
 

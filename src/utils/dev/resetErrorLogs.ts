@@ -8,6 +8,7 @@ export const resetErrorLogs = async () => {
     writeFile(join(resolve("./"), "errorLogs", "passivePracticeWinErr.txt"), ""),
     writeFile(join(resolve("./"), "errorLogs", "activePracticeWinErr.txt"), ""),
     writeFile(join(resolve("./"), "errorLogs", "trayWinErr.txt"), ""),
+    writeFile(join(resolve("./"), "errorLogs", "errorWinErr.txt"), ""),
   ]).catch((err) => console.log(err));
 
   console.log("Error logs cleared");
