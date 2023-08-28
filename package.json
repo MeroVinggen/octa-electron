@@ -7,7 +7,8 @@
   "scripts": {
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build:renderers": "electron-vite build",
+    "build:renderers": "electron-vite build && pnpm run after-build-renderers",
+    "after-build-renderers": "tsx ./src/utils/dev/appScriptAction.ts copyOctaWebRendererFilesToBuild",
     "build:win": "pnpm run build:renderers && electron-builder --win --config",
     "build:win:without-renderer-build": "electron-builder --win --config",
     "reset:errLogs": "tsx ./src/utils/dev/appScriptAction.ts resetErrorLogs",

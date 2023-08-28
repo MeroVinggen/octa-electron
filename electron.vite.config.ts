@@ -18,11 +18,7 @@ export default defineConfig({
       ...build,
       rollupOptions: {
         input: {
-          "mainWindow/main": resolve(__dirname, 'src/preload/mainWindow/main.ts'),
-          "passivePracticeWindow/main": resolve(__dirname, 'src/preload/passivePracticeWindow/main.ts'),
-          "activePracticeWindow/main": resolve(__dirname, 'src/preload/activePracticeWindow/main.ts'),
-          "errorWindow/main": resolve(__dirname, 'src/preload/errorWindow/main.ts'),
-          "trayWindow/main": resolve(__dirname, 'src/preload/trayWindow/main.ts'),
+          "main": resolve(__dirname, 'src/preload/main.ts'),
         }
       }
     },
