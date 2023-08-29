@@ -19,6 +19,9 @@ nsis:
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  uninstallerIcon: build/icon-orange.ico
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
