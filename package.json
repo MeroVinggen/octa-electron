@@ -1,7 +1,7 @@
 {
   "name": "octa-electron",
   "version": "1.0.0",
-  "description": "Application to develope your vocabulary",
+  "description": "Application to develop your vocabulary",
   "main": "./out/main/index.js",
   "author": "Mero",
   "scripts": {
