@@ -12,7 +12,7 @@
 *  vocabulary & practice statistic for all time of use or certain year
 *  app data transferring by exporting as a file
 
-### Tech-stack
+### Tech stack
 
 <img src="./github extras/tech-stack.jpg">
 
