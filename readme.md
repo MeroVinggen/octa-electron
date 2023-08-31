@@ -16,4 +16,6 @@
 
 <img src="./github extras/tech-stack.jpg">
 
+Web part: <a href="https://github.com/Mero-Plaform/octa-web"> Octa-web repository </a>
+
 Demo: <a href="https://mero-plaform.github.io/octa-web-build/"> Octa </a>
