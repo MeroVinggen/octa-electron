@@ -25,7 +25,6 @@ export const createActivePracticeWindow = () => {
       y: height / 2 - 45,
       show: false,
       frame: false,
-      skipTaskbar: true,
       resizable: false,
       icon: appIconURL,
       webPreferences: {
