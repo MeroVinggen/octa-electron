@@ -35,7 +35,7 @@ export const createPassivePracticeWindow = () => {
       {
         event: 'ready-to-show',
         handlers: [
-          () => winRegistryInstance.getWin()!.show(),
+          () => winRegistryInstance.getWin()!.showInactive(),
           () => winRegistryInstance.onOpen(),
         ]
       },
