@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron';
+import { ipcMain } from 'electron';
 import { windowInstanceRegistry } from '../../../shared/windowRegistries/windowInstanceRegistry';
 import { getAppSettingsData } from '../../DB/utils';
 import { openMainWindow } from '../../mainWindow/utils';
