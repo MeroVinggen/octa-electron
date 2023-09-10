@@ -35,7 +35,7 @@ export const createErrorWindow = () => {
       }
     },
     sourceLoader: errorWindowSourceLoader,
-    listeners: [
+    windowListeners: [
       {
         event: 'ready-to-show',
         handlers: [

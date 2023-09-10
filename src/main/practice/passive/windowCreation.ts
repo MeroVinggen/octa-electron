@@ -31,7 +31,7 @@ export const createPassivePracticeWindow = () => {
       }
     }, 
     sourceLoader: passivePracticeWindowSourceLoader,
-    listeners: [
+    windowListeners: [
       {
         event: 'ready-to-show',
         handlers: [

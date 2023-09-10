@@ -38,7 +38,7 @@ export const createTrayWindow = () => {
       }
     },
     sourceLoader: trayWindowSourceLoader,
-    listeners: [
+    windowListeners: [
       {
         event: 'blur',
         handlers: [

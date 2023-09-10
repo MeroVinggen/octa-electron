@@ -4,6 +4,12 @@ export class Window {
   private win: BrowserWindow | undefined;
   private isClosed = true;
 
+  /**
+   * using once on next "ready-to-show" event
+   * after which cll is cleared
+   */
+  private nextDidFinishLoadListeners: Function[] = [];
+
   getWin() {
     return this.win;
   }
@@ -35,9 +41,22 @@ export class Window {
 
   onOpen() {
     this.isClosed = false;
+    this.nextDidFinishLoadListeners = [];
   }
 
   getIsClosed() {
     return this.isClosed;
+  }
+
+  /**
+   * using once on next "ready-to-show" event
+   * after which cll is cleared
+   */
+  addNextDidFinishLoadListeners(callback: Function) {
+    this.nextDidFinishLoadListeners.push(callback);
+  }
+
+  getNextDidFinishLoadListeners() {
+    return this.nextDidFinishLoadListeners;
   }
 }

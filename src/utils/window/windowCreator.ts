@@ -3,6 +3,8 @@ import { BrowserWindow } from 'electron';
 
 type WindowEvents = "ready-to-show" | "closed" | "show" | "blur" | "maximize" | "unmaximize";
 
+type WebcontentsEvents = "did-finish-load";
+
 type AdditionalSettings = {
   openDevTools?: boolean;
 };
@@ -10,7 +12,8 @@ type AdditionalSettings = {
 type CreateWindowConfig = {
   windowSettings: Electron.BrowserWindowConstructorOptions;
   additionalSettings?: AdditionalSettings;
-  listeners: { event: WindowEvents, handlers: Function[]; }[];
+  windowListeners: { event: WindowEvents, handlers: Function[]; }[];
+  webcontentsListeners?: { event: WebcontentsEvents, handlers: Function[]; }[];
   sourceLoader: (win: BrowserWindow) => void;
 };
 
@@ -25,10 +28,17 @@ export const createWindow = (config: CreateWindowConfig) => {
     }, 1000);
   }
 
-  config.listeners.forEach(({ event, handlers }) => {
+  config.windowListeners.forEach(({ event, handlers }) => {
     handlers.forEach((handler) => {
       // @ts-ignore
       win.on(event, handler);
+    });
+  });
+
+  config.webcontentsListeners?.forEach(({ event, handlers }) => {
+    handlers.forEach((handler) => {
+      // @ts-ignore
+      win.webContents.on(event, handler);
     });
   });
 

@@ -1,1 +1,0 @@
-const t=()=>{const e=document.getElementById("appEntryLoadingScreen");e.addEventListener("animationend",n=>{e.remove(),document.getElementById("appEntryLoadingScreenStyles").remove()},{once:!0}),e.classList.add("openLoadingScreen")};export{t as onAppRendered};

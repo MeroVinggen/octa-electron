@@ -31,7 +31,7 @@ export const createMainWindow = () => {
       }
     },
     sourceLoader: mainWindowSourceLoader,
-    listeners: [
+    windowListeners: [
       {
         event: 'ready-to-show',
         handlers: [
@@ -57,6 +57,14 @@ export const createMainWindow = () => {
           onWindowUnmaximize,
         ]
       }
+    ],
+    webcontentsListeners: [
+        {
+          event: 'did-finish-load',
+          handlers: [
+            ...winRegistryInstance.getNextDidFinishLoadListeners(),
+          ]
+        },
     ]
   });
 

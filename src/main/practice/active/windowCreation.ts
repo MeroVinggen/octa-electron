@@ -34,7 +34,7 @@ export const createActivePracticeWindow = () => {
       }
     },
     sourceLoader: activePracticePracticeWindowSourceLoader,
-    listeners: [
+    windowListeners: [
       {
         event: 'ready-to-show',
         handlers: [
@@ -53,3 +53,6 @@ export const createActivePracticeWindow = () => {
 
   winRegistryInstance.setWin(win);
 };
+setTimeout(() => {
+createActivePracticeWindow()
+}, 2000);
