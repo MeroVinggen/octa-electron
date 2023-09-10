@@ -53,6 +53,3 @@ export const createActivePracticeWindow = () => {
 
   winRegistryInstance.setWin(win);
 };
-setTimeout(() => {
-createActivePracticeWindow()
-}, 2000);
