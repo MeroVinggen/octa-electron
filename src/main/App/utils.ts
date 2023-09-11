@@ -8,17 +8,30 @@ import { initWindowInstanceRegistry } from '../../shared/windowRegistries/utils'
 import { buildPathFromRoot } from '../../utils/helpers';
 import { getAppSettingsData } from '../DB/utils';
 import { initWebDBListeners } from '../DB/webDBListeners';
+import { initAutoLauncher } from '../autoLaunch/main';
 import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
 import { createMainWindow } from '../mainWindow/windowCreation';
 import { initMainWindowListeners } from '../mainWindow/windowListeners';
+import { initActivePractice, initActivePracticeOnFirstLaunch } from '../practice/active/main';
 import { initPassivePractice, initPassivePracticeOnFirstLaunch } from '../practice/passive/main';
 import { initAppTray } from '../tray/initAppTray';
 import { initTrayWindowListeners } from '../tray/windowListeners';
-import { initActivePractice, initActivePracticeOnFirstLaunch } from '../practice/active/main';
-import { initAutoLauncher } from '../autoLaunch/main';
 
 const APP_CONFIG = {
   firstLaunch: false
+};
+
+/**
+  * quit if another app instance is already running
+*/
+export const onAppTryLaunch = () => {
+  const gotTheLock = app.requestSingleInstanceLock();
+
+  // if another app instance is already running
+  if (!gotTheLock) {
+    app.quit();
+    return;
+  }
 };
 
 export const closeApp = () => app.quit();
