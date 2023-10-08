@@ -22,3 +22,7 @@ export const getTrayWinCoord = (mouseCoord: number, trayWinSize: number, screenS
 export const destroyTray = () => {
   getTrayInstance().destroy();
 };
+
+export const onChangeIdleMode = (mode: boolean) => {
+  windowInstanceRegistry.get("tray")!.getWin()!.webContents.send("update idle mode", mode);
+};

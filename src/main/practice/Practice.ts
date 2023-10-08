@@ -3,6 +3,7 @@ import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInst
 import { WEEK_DAY_BY_INDEX, toMilliseconds } from '../../utils/helpers';
 import { PracticeSettings, PracticeVariants, TimeFrame, WEEK_DAYS_SHORTS_TYPE } from '../DB/interface';
 import { checkDictionaryIsEmpty, getAppSettingsData } from '../DB/utils';
+import { onChangeIdleMode } from '../tray/utils';
 import { PracticeSettingsSnapshot } from './PracticeSettingsSnapshot';
 
 export class Practice {
@@ -15,6 +16,8 @@ export class Practice {
   settingsSnapshot: PracticeSettingsSnapshot;
   windowCreator: Function;
   practiceKey: PracticeVariants;
+  isIdleMode: boolean = false;
+  idleModeTimerID: NodeJS.Timeout;
 
   constructor(
     windowInstanceID: Practice["windowInstanceID"],
@@ -27,6 +30,26 @@ export class Practice {
     this.settingsSnapshot = new PracticeSettingsSnapshot();
   }
 
+  /**
+   * sets 1 hour idle
+   */
+  idleMode() {
+    // turning off if enabled & setup practice
+    if (this.isIdleMode) {
+      clearTimeout(this.idleModeTimerID);
+      this.isIdleMode = false;
+      this.setup();
+      return this.isIdleMode;
+    }
+
+    this.stopCurrentTimers();
+    windowInstanceRegistry.get(this.windowInstanceID)!.close();
+    this.isIdleMode = true;
+    // setTimeout(this.setup, 3_600_000)
+    this.idleModeTimerID = setTimeout(this.setup, 3000)
+    return this.isIdleMode;
+  }
+  
   stopCurrentTimers = () => {
     clearTimeout(this.timeFrameTimerId);
     clearTimeout(this.intervalTimerId);
@@ -38,7 +61,15 @@ export class Practice {
     this.setup(practiceData);
   };
 
-  async setup(practiceData?: PracticeSettings) {
+  onOffIdleMode() {
+    if (!this.isIdleMode) { return; }
+
+    this.isIdleMode = false;
+    onChangeIdleMode(this.isIdleMode);
+  }
+
+  setup = async (practiceData?: PracticeSettings) => {
+    this.onOffIdleMode();
     const currentPracticeData = practiceData || (await getAppSettingsData()).practice[this.practiceKey];
 
     this.settingsSnapshot.setSnapshot(currentPracticeData);
