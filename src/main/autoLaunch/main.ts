@@ -6,6 +6,9 @@ export const initAutoLauncher = () => {
 };
 
 export const enableAutoLaunch = () => {
+  console.log("app auto launch disabled");
+  return;
+
   if (import.meta.env.PROD) {
     app.setLoginItemSettings({
       openAtLogin: true
