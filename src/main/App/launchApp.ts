@@ -12,7 +12,11 @@ export const launchApp = async () => {
 
   await app.whenReady();
 
-  electronApp.setAppUserModelId('octa.mero');
+  if (import.meta.env.DEV) {
+    electronApp.setAppUserModelId('octa.test');
+  } else {
+    electronApp.setAppUserModelId('octa.mero');
+  }
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
