@@ -45,8 +45,7 @@ export class Practice {
     this.stopCurrentTimers();
     windowInstanceRegistry.get(this.windowInstanceID)!.close();
     this.isIdleMode = true;
-    // setTimeout(this.setup, 3_600_000)
-    this.idleModeTimerID = setTimeout(this.setup, 3000)
+    this.idleModeTimerID = setTimeout(this.setup, 3_600_000);
     return this.isIdleMode;
   }
   
