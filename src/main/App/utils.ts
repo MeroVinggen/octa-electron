@@ -23,7 +23,7 @@ const APP_CONFIG = {
 
 /**
   * quit if another app instance is already running
-*/
+  */
 export const onAppTryLaunch = () => {
   const gotTheLock = app.requestSingleInstanceLock();
 
@@ -33,6 +33,21 @@ export const onAppTryLaunch = () => {
     return;
   }
 };
+
+// possible fix if the error occurs (new instance is created at second launch)
+// export const onAppTryLaunch = () => {
+//   const gotTheLock = app.requestSingleInstanceLock();
+
+//   // if another app instance is already running
+//   if (!gotTheLock) {
+//     app.quit();
+//   } else {
+//     app.on('second-instance', () => {
+//       // focus/restore existed main window
+//       openMainWindow();
+//     });
+//   }
+// };
 
 export const closeApp = () => app.quit();
 

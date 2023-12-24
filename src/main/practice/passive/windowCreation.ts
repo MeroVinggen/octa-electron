@@ -29,7 +29,7 @@ export const createPassivePracticeWindow = () => {
         sandbox: false,
         devTools: is.dev,
       }
-    }, 
+    },
     sourceLoader: passivePracticeWindowSourceLoader,
     windowListeners: [
       {
