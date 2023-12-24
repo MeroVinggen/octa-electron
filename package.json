@@ -17,7 +17,8 @@
   "dependencies": {
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^1.0.2",
-    "node-json-db": "^2.2.0"
+    "node-json-db": "^2.2.0",
+    "rwlock": "^5.0.0"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

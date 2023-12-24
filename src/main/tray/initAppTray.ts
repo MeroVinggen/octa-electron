@@ -3,7 +3,8 @@ import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInst
 import { openMainWindow } from '../mainWindow/utils';
 import { getTrayWinCoord } from './utils';
 import { createTrayWindow, getTrayWindowSizes } from './windowCreation';
-import appIconURL from '/resources/octopus-teal.png?asset';
+// import appIconURL from '/resources/octopus-teal.png?asset';
+import appIconURL from '/resources/icon.ico?asset';
 
 let tray: Electron.CrossProcessExports.Tray;
 
