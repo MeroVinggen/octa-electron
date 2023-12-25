@@ -1,10 +1,15 @@
-import { launchApp } from './App/launchApp';
-import { appLaunchPreparer as appLaunchPreparer, onAppReady } from './App/utils';
+import { app } from 'electron';
+import { setAppAdditionalListenersAndModelId } from './App/launchApp';
+import { appLaunchPreparer, onAppReady, onAppTryLaunch } from './App/utils';
 
 (async () => {
+  onAppTryLaunch();
+
   const openAppWindowAtStart = await appLaunchPreparer();
 
-  await launchApp();
+  setAppAdditionalListenersAndModelId();
+
+  await app.whenReady();
 
   onAppReady({ openAppWindowAtStart });
 })();

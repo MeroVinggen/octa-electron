@@ -10,6 +10,7 @@ import { getAppSettingsData } from '../DB/utils';
 import { initWebDBListeners } from '../DB/webDBListeners';
 import { initAutoLauncher } from '../autoLaunch/main';
 import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
+import { openMainWindow } from '../mainWindow/utils';
 import { createMainWindow } from '../mainWindow/windowCreation';
 import { initMainWindowListeners } from '../mainWindow/windowListeners';
 import { initActivePractice, initActivePracticeOnFirstLaunch } from '../practice/active/main';
@@ -24,30 +25,20 @@ const APP_CONFIG = {
 /**
   * quit if another app instance is already running
   */
+// export const onAppTryLaunch = async () => {
 export const onAppTryLaunch = () => {
-  const gotTheLock = app.requestSingleInstanceLock();
 
   // if another app instance is already running
-  if (!gotTheLock) {
-    app.quit();
-    return;
+  if (!app.requestSingleInstanceLock()) {
+    app.exit();
+  } else {
+
+    // main instance event
+    app.on('second-instance', () => {
+      openMainWindow();
+    });
   }
 };
-
-// possible fix if the error occurs (new instance is created at second launch)
-// export const onAppTryLaunch = () => {
-//   const gotTheLock = app.requestSingleInstanceLock();
-
-//   // if another app instance is already running
-//   if (!gotTheLock) {
-//     app.quit();
-//   } else {
-//     app.on('second-instance', () => {
-//       // focus/restore existed main window
-//       openMainWindow();
-//     });
-//   }
-// };
 
 export const closeApp = () => app.quit();
 
