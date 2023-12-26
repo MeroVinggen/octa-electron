@@ -68,8 +68,14 @@ export type BasicSettings = {
 
 export type PracticeVariants = keyof AppSettings["practice"];
 
+export type IdleModeSettings = {
+  isEnabled: boolean;
+  timer: string;
+};
+
 export type AppSettings = {
   basic: BasicSettings;
+  idleMode: IdleModeSettings;
   practice: {
     passive: PracticeSettings;
     active: PracticeSettings;
