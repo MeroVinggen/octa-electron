@@ -6,7 +6,7 @@ import { createWindow } from '../../utils/window/windowCreator';
 
 const trayWindowSizes = { 
   height: 105,
-  width: 160,
+  width: 225,
 };
 
 export const getTrayWindowSizes = () => ({ ...trayWindowSizes });
