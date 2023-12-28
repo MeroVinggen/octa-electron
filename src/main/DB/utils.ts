@@ -48,8 +48,10 @@ export const updatePracticeData = async (practiceData) => {
   await desktopDB.push('/practiceSettings', practiceData);
 };
 
+/* ------------------------------ app settings ------------------------------ */
+
 // init & update
-export const updateAppSettingsData = async (appSettingsData) => {
+export const updateAppSettingsData = async (appSettingsData: AppSettings) => {
   await desktopDB.push('/appSettings', appSettingsData);
   desktopDBPubSub.publish("updateAppSettings");
 };
@@ -60,7 +62,7 @@ export const onAppSettingsClear = async () => {
 };
 
 export const getAppSettingsData = async (): Promise<AppSettings> => {
-  return desktopDB.getData("/appSettings");
+  return desktopDB.getData("/appSettings");;
 };
 
 type DictionaryRow = Word & {

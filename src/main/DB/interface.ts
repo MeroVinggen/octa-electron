@@ -70,7 +70,8 @@ export type PracticeVariants = keyof AppSettings["practice"];
 
 export type IdleModeSettings = {
   isEnabled: boolean;
-  timer: string;
+  timerStart: number;
+  timerValue: number | null;
 };
 
 export type AppSettings = {
