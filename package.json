@@ -24,7 +24,7 @@
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron/notarize": "^1.2.3",
     "@types/node": "^18.16.19",
-    "electron": "^24.6.2",
+    "electron": "^24.8.8",
     "electron-builder": "^23.6.0",
     "electron-vite": "^1.0.27",
     "tsx": "^3.12.7",
