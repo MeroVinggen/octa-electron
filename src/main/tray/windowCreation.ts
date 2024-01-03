@@ -4,12 +4,10 @@ import { join } from 'path';
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
 import { createWindow } from '../../utils/window/windowCreator';
 
-const trayWindowSizes = { 
+export const trayWindowSizes = {
   height: 105,
-  width: 225,
-};
-
-export const getTrayWindowSizes = () => ({ ...trayWindowSizes });
+  width: 210,
+} as const;
 
 const trayWindowSourceLoader = (win: BrowserWindow) => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
@@ -34,7 +32,7 @@ export const createTrayWindow = () => {
       webPreferences: {
         preload: join(__dirname, '../preload/main.js'),
         sandbox: false,
-        devTools: false,
+        devTools: import.meta.env.DEV,
       }
     },
     sourceLoader: trayWindowSourceLoader,

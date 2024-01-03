@@ -1,6 +1,6 @@
 import { desktopDB } from './desktopDB';
 import { desktopDBPubSub } from './desktopDBPubSub';
-import { AppSettings, Word } from './interface';
+import { AppSettings, IdleModeSettings, Word } from './interface';
 
 export const onAddWord = async (word: Word) => {
   await desktopDB.push(`/dictionary/${word.id}`, word);
@@ -63,6 +63,17 @@ export const onAppSettingsClear = async () => {
 
 export const getAppSettingsData = async (): Promise<AppSettings> => {
   return desktopDB.getData("/appSettings");;
+};
+
+/* -------------------------------- idle mode ------------------------------- */
+
+// init & update
+export const updateIdleModeSettingsData = async (idleModeData: IdleModeSettings) => {
+  await desktopDB.push('/appSettings/idleMode', idleModeData);
+};
+
+export const getIdleModeData = async (): Promise<IdleModeSettings> => {
+  return (await desktopDB.getData("/appSettings") as AppSettings).idleMode;
 };
 
 type DictionaryRow = Word & {

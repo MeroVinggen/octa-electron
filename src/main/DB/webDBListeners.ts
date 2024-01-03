@@ -22,7 +22,7 @@ const setupListenersList = () => {
 };
 
 /**
- * updating desktop DB according to web DB changes
+ * updating desktopDB according to webDB changes
  */
 export const initWebDBListeners = () => {
   setupListenersList();

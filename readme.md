@@ -1,6 +1,6 @@
 <img src="./github extras/github repository poster.jpg">
 
-# Svelte based app for developing vocabulary wrapped in electron
+# Svelte-based app for developing vocabulary wrapped in electron
 
 ### Features
 
@@ -16,6 +16,6 @@
 
 <img src="./github extras/tech-stack x_112224123.png" alt="tech stack list">
 
-Web part: <a href="https://github.com/Mero-Plaform/octa-web"> Octa-web repository </a>
+Web part: [Octa-web repository](https://github.com/Mero-Plaform/octa-web)
 
-Demo: [Octa-web](https://mero-plaform.github.io/octa-web-build/)
+Demo: [Octa-web](https://merovinggen.github.io/octa-web-build/)

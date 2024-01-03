@@ -10,15 +10,17 @@ import { getAppSettingsData } from '../DB/utils';
 import { initWebDBListeners } from '../DB/webDBListeners';
 import { initAutoLauncher } from '../autoLaunch/main';
 import { initErrorWindowListeners } from '../errorWindow/windowMessaging';
+import { initIdleMode, initIdleModeAppListeners } from "../idleMode/idleMode";
 import { openMainWindow } from '../mainWindow/utils';
 import { createMainWindow } from '../mainWindow/windowCreation';
 import { initMainWindowListeners } from '../mainWindow/windowListeners';
-import { initActivePractice, initActivePracticeOnFirstLaunch } from '../practice/active/main';
-import { initPassivePractice, initPassivePracticeOnFirstLaunch } from '../practice/passive/main';
+import { initActivePracticeOnFirstLaunch } from '../practice/active/main';
+import { initPassivePracticeOnFirstLaunch } from '../practice/passive/main';
 import { initAppTray } from '../tray/initAppTray';
 import { initTrayWindowListeners } from '../tray/windowListeners';
+import { windowInstanceRegistry } from "../../shared/windowRegistries/windowInstanceRegistry";
 
-const APP_CONFIG = {
+export const APP_CONFIG = {
   firstLaunch: false
 };
 
@@ -52,6 +54,10 @@ const checkAppFirstLaunch = () => existsSync(buildPathFromRoot("appConfig.json")
  * runs before app ready 
  */
 export const appLaunchPreparer = async () => {
+
+  // fix for tay window blinking on show
+  app.commandLine.appendSwitch('wm-window-animations-disabled');
+
   let openAppWindowAtStart: boolean;
 
   // on app first run
@@ -71,13 +77,11 @@ export const appLaunchPreparer = async () => {
 
 const appFirstLaunchSetup = () => {
   createAppConfig();
-  initPassivePracticeOnFirstLaunch();
-  initActivePracticeOnFirstLaunch();
+  APP_CONFIG.firstLaunch = true;
 };
 
 const appNotFirstLaunchSetup = () => {
-  initPassivePractice();
-  initActivePractice();
+  initIdleMode();
 };
 
 /**
@@ -93,6 +97,9 @@ const appGeneralSetup = () => {
   initMainWindowListeners();
   initTrayWindowListeners();
   initAutoLauncher();
+  initIdleModeAppListeners();
+  initPassivePracticeOnFirstLaunch();
+  initActivePracticeOnFirstLaunch();
 };
 
 type OnAppReadyProps = {
@@ -103,7 +110,14 @@ type OnAppReadyProps = {
  * runs after app ready
  */
 export const onAppReady = (data: OnAppReadyProps) => {
-  initAppTray();
+  
+  // at first app launch tray will be created only after main window did full initialization
+  // (e.g. webDB data is rdy)
+  if (!APP_CONFIG.firstLaunch) {
+    initAppTray();
+  } else {
+    windowInstanceRegistry.get("main")?.addNextDidFinishLoadListeners(initAppTray);
+  }
 
   if (data.openAppWindowAtStart) {
     createMainWindow();

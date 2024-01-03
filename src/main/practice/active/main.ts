@@ -9,12 +9,12 @@ const initActivePracticeInstance = () => {
   activePractice = new Practice("activePractice", createActivePracticeWindow, "active");
 };
 
-export const initActivePractice = () => {
-  initActivePracticeInstance();
-  initWindowListeners();
-  initActivePracticeDesktopDBObserverListeners();
-  activePractice.setup();
-};
+// export const initActivePractice = () => {
+//   initActivePracticeInstance();
+//   initWindowListeners();
+//   initActivePracticeDesktopDBObserverListeners();
+//   activePractice.setup();
+// };
 
 /**
  * not calling active practice setup

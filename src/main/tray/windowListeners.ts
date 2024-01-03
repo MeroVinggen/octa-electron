@@ -1,21 +1,15 @@
 import { ipcMain } from 'electron';
 import { closeApp } from '../App/utils';
+import { onUpdateIdleModeState, onUpdateIdleModeTimerData } from "../idleMode/idleMode";
 import { openMainWindow } from '../mainWindow/utils';
-import { closeTrayWindow } from './utils';
-import { passivePractice } from '../practice/passive/main';
-import { activePractice } from '../practice/active/main';
+import { closeTrayWindow, onGetIdleModeData } from './utils';
 
-type trayMenuList = ["Open main window", "Idle mode", "Exit"];
+// "Idle mode" is not dispatching
+type trayMenuList = ["Open main window", "Exit Octa"];
 
 const trayMenuItemClickHandlers: Record<trayMenuList[number], (e: Electron.IpcMainEvent) => void> = {
   "Open main window": () => { closeTrayWindow(); openMainWindow(); },
-  "Idle mode": (e) => { 
-    closeTrayWindow(); 
-    const isIdleMode = passivePractice.idleMode();
-    activePractice.idleMode();
-    e.reply("update idle mode", isIdleMode);
-  },
-  "Exit": () => { closeTrayWindow(); closeApp(); },
+  "Exit Octa": () => { closeTrayWindow(); closeApp(); },
 };
 
 const onTrayMenuItemClick = (e: Electron.IpcMainEvent, itemName: trayMenuList[number]) => {
@@ -28,4 +22,8 @@ const onTrayMenuItemClick = (e: Electron.IpcMainEvent, itemName: trayMenuList[nu
 
 export const initTrayWindowListeners = () => {
   ipcMain.on("trayMenuItemClick", onTrayMenuItemClick);
+
+  ipcMain.on("getIdleModeData", onGetIdleModeData);
+  ipcMain.on("updateIdleModeState", onUpdateIdleModeState);
+  ipcMain.on("updateIdleModeTimerData", onUpdateIdleModeTimerData);
 };

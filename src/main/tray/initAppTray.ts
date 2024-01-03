@@ -2,8 +2,7 @@ import { Tray, screen } from 'electron';
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
 import { openMainWindow } from '../mainWindow/utils';
 import { getTrayWinCoord } from './utils';
-import { createTrayWindow, getTrayWindowSizes } from './windowCreation';
-// import appIconURL from '/resources/octopus-teal.png?asset';
+import { createTrayWindow, trayWindowSizes } from './windowCreation';
 import appIconURL from '/resources/icon.ico?asset';
 
 let tray: Electron.CrossProcessExports.Tray;
@@ -15,21 +14,20 @@ export const initAppTray = () => {
 
   createTrayWindow();
 
-  const trayWindow = windowInstanceRegistry.get("tray")!;
-
   tray.setToolTip('Octa');
 
   tray.on("click", openMainWindow);
 
   tray.on("right-click", () => {
-    const trayWinSizes = getTrayWindowSizes();
     const screenSizes = screen.getPrimaryDisplay().workAreaSize;
     const { x, y } = screen.getCursorScreenPoint();
-
-    trayWindow.getWin()!.setPosition(
-      getTrayWinCoord(x, trayWinSizes.width, screenSizes.width),
-      getTrayWinCoord(y, trayWinSizes.height, screenSizes.height)
-    );
+    const trayWindow = windowInstanceRegistry.get("tray")!;
+    trayWindow.getWin()!.setBounds({
+      x: getTrayWinCoord(x, trayWindowSizes.width, screenSizes.width),
+      y: getTrayWinCoord(y, trayWindowSizes.height, screenSizes.height),
+      width: trayWindowSizes.width,
+      height: trayWindowSizes.height
+    });
     trayWindow.getWin()!.show();
   });
 };

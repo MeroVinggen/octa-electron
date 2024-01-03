@@ -1,10 +1,6 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { app } from 'electron';
 
-export type LaunchAppConfig = {
-  afterLaunch: Function[];
-};
-
 export const setAppAdditionalListenersAndModelId = () => {
   if (import.meta.env.DEV) {
     electronApp.setAppUserModelId('octa.test');

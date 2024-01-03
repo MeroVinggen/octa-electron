@@ -1,16 +1,15 @@
-import { existsSync } from 'fs';
-import { unlink } from 'fs/promises';
-import { join, resolve } from 'path';
+import { resetWebAppDB } from "./resetAppWebDB";
+import { resetDesktopAppDB } from "./resetDesktopAppDB";
+import { resetErrorLogs } from "./resetErrorLogs";
 
 export const resetApp = async () => {
+  console.log("-- App full reset begin");
+
   await Promise.all([
-    (() => new Promise(async (res) => {
-      await (existsSync(join(resolve("./"), "appConfig.json")) && unlink(join(resolve("./"), "appConfig.json")));
-      res(null);
-    }))(),
-    (await import("./resetAppDB")).resetAppDB(),
-    (await import("./resetErrorLogs")).resetErrorLogs(),
+    resetDesktopAppDB(),
+    resetErrorLogs(),
+    resetWebAppDB(),
   ]).catch((err) => console.log(err));
 
-  console.log("App data reset");
+  console.log("-- App full reset finished");
 };

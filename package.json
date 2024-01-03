@@ -11,7 +11,8 @@
     "after-build-renderers": "tsx ./src/utils/dev/appScriptAction.ts copyOctaWebRendererFilesToBuild",
     "build:win": "pnpm run build:renderers && electron-builder --win --config",
     "reset:errLogs": "tsx ./src/utils/dev/appScriptAction.ts resetErrorLogs",
-    "reset:AppDB": "tsx ./src/utils/dev/appScriptAction.ts resetAppDB",
+    "reset:desktopAppDB": "tsx ./src/utils/dev/appScriptAction.ts resetDesktopAppDB",
+    "reset:webAppDB": "tsx ./src/utils/dev/appScriptAction.ts resetWebAppDB",
     "reset:App": "tsx ./src/utils/dev/appScriptAction.ts resetApp"
   },
   "dependencies": {

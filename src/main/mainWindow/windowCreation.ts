@@ -37,6 +37,7 @@ export const createMainWindow = () => {
         handlers: [
           () => winRegistryInstance.getWin()!.show(),
           () => winRegistryInstance.onOpen(),
+          () => winRegistryInstance.getWin()!.webContents.openDevTools(),
         ]
       },
       {

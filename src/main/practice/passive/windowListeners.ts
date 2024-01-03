@@ -35,6 +35,7 @@ const onUpdateDBWithPracticeResult = (_, updatedWord: Word, updatedCurYearData: 
 export const initWindowListeners = () => {
   ipcMain.on("passivePracticeResult", onPassivePracticeResult);
   ipcMain.on("getNotificationSetting", getNotificationSetting);
+  
   // if main win is closed - update by sended data from passivePractice win
   ipcMain.on("updateDBPracticeResult", onUpdateDBWithPracticeResult);
   ipcMain.on("closePassivePracticeWindow", closePassivePracticeWindow);

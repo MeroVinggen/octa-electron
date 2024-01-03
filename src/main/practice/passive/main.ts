@@ -9,12 +9,12 @@ const initPassivePracticeInstance = () => {
   passivePractice = new Practice("passivePractice", createPassivePracticeWindow, "passive");
 };
 
-export const initPassivePractice = () => {
-  initPassivePracticeInstance();
-  initWindowListeners();
-  initPassivePracticeDesktopDBObserverListeners();
-  passivePractice.setup();
-};
+// export const initPassivePractice = () => {
+//   initPassivePracticeInstance();
+//   initWindowListeners();
+//   initPassivePracticeDesktopDBObserverListeners();
+//   passivePractice.setup();
+// };
 
 /**
  * not calling passive practice setup

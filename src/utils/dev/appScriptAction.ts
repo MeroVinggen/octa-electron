@@ -1,13 +1,15 @@
-import { resetAppDB } from './resetAppDB';
-import { resetApp } from './resetApp';
-import { resetErrorLogs } from './resetErrorLogs';
 import { copyOctaWebRendererFilesToBuild } from './copyOctaWebRendererFilesToBuild';
+import { resetApp } from './resetApp';
+import { resetWebAppDB } from "./resetAppWebDB";
+import { resetDesktopAppDB } from './resetDesktopAppDB';
+import { resetErrorLogs } from './resetErrorLogs';
 
 const [, , command, ...params] = process.argv;
 
 const commandHandlers = {
   resetApp,
-  resetAppDB,
+  resetDesktopAppDB,
+  resetWebAppDB,
   resetErrorLogs,
   copyOctaWebRendererFilesToBuild,
 };
@@ -15,5 +17,5 @@ const commandHandlers = {
 if (command in commandHandlers) {
   commandHandlers[command](params);
 } else {
-  throw new Error("Unknown command - " + command)
+  throw new Error("Unknown command - " + command);
 }
