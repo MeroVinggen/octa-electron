@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { importAppDBData, onAddWord, onAppSettingsClear, onDeleteWord, onDictionaryClear, onEditWord, onStatisticClear, updateAppSettingsData, updatePracticeData, updateStatistic } from './utils';
+import { onAddWord, onAppSettingsClear, onDeleteWord, onDictionaryClear, onEditWord, onImportAppData, onStatisticClear, updateAppSettingsData, updateIdleMode, updatePracticeData, updateStatistic } from './utils';
 
 let webDBListeners: { [key: string]: Function; };
 
@@ -16,8 +16,10 @@ const setupListenersList = () => {
     updateStatistic,
     initAppSettingsData: updateAppSettingsData,
     updateAppSettingsData,
+    initIdleModeData: updateIdleMode,
+    updateIdleModeData: updateIdleMode,
     onAppSettingsClear,
-    importAppDBData,
+    importAppDBData: onImportAppData,
   };
 };
 
@@ -29,5 +31,6 @@ export const initWebDBListeners = () => {
 
   Object.entries(webDBListeners).forEach(([key, handler]) => {
     ipcMain.on(key, (_, ...data) => handler(...data));
+    // ipcMain.on(key, (_, ...data) => { console.log(`DB listener - ${key}`); handler(...data) });
   });
 };

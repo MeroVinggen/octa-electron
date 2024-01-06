@@ -1,26 +1,36 @@
 import { app } from "electron";
-import type { AppSettings, IdleModeSettings } from "../DB/interface";
-import { getIdleModeData, updateIdleModeSettingsData } from "../DB/utils";
+import type { IdleMode } from "../DB/interface";
+import { getIdleMode, updateIdleMode } from "../DB/utils";
 import { activePractice } from "../practice/active/main";
 import { passivePractice } from "../practice/passive/main";
-import { onIdleModeCountdownStart } from "../tray/utils";
+// import { onIdleModeCountdownStart } from "../tray/utils";
 
-let updateIdleModeSettingsDataCache: IdleModeSettings = {
+let updateIdleModeSettingsDataCache: IdleMode = {
   isEnabled: false,
   timerStart: 0,
   timerValue: null
 };
 
 let idleModeTimerID: NodeJS.Timeout;
-let idleModeIsEnabled: AppSettings["idleMode"]["isEnabled"] = false;
-let idleModeTimerStart: AppSettings["idleMode"]["timerStart"] = 0;
-let idleModeTimerValue: AppSettings["idleMode"]["timerValue"] = null;
+let idleModeIsEnabled: IdleMode["isEnabled"] = false;
+let idleModeTimerStart: IdleMode["timerStart"] = 0;
+let idleModeTimerValue: IdleMode["timerValue"] = null;
+
+/**
+ * @returns `[isEnabled, timerStart, timerValue]`
+*/
+export const getCurrentIdleModeData = () => {
+  recalcCurrentIdleModeData();
+  return [
+    idleModeIsEnabled,
+    idleModeTimerStart,
+    idleModeTimerValue
+  ];
+};
 
 export const onUpdateIdleModeState = (
-  _: Electron.IpcMainEvent,
-  idleModeState: AppSettings["idleMode"]["isEnabled"],
+  idleModeState: IdleMode["isEnabled"],
 ) => {
-  console.log("onUpdateIdleModeState", idleModeState);
 
   // prevent processing for tray window stores initializing
   if (idleModeIsEnabled === idleModeState) { return; }
@@ -28,40 +38,54 @@ export const onUpdateIdleModeState = (
   idleModeIsEnabled = idleModeState;
 
   if (idleModeIsEnabled) {
+    idleModeTimerValue = null;
     setPracticesToIdle();
+    updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue);
   } else {
     stopIdleModeTimer();
     onIdleModeDisabled();
   }
-
-  updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue);
 };
 
 export const onUpdateIdleModeTimerData = (
-  _: Electron.IpcMainEvent,
-  idleModeTimer: AppSettings["idleMode"]["timerValue"],
+  idleModeTimer: IdleMode["timerValue"],
 ) => {
-  console.log("onUpdateIdleModeTimerData", idleModeTimer);
   idleModeTimerValue = idleModeTimer;
 
   stopIdleModeTimer();
 
-  if (idleModeTimerValue === null) { 
+  if (idleModeTimerValue === null) {
     idleModeTimerStart = 0;
-    onIdleModeCountdownStart(idleModeTimerStart, idleModeTimerValue);
-    updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue)
-    return; 
+    // onIdleModeCountdownStart(idleModeTimerStart, idleModeTimerValue);
+    updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue);
+    return;
   }
 
   idleModeTimerStart = Date.now();
 
-  onIdleModeCountdownStart(idleModeTimerStart, idleModeTimerValue);
+  // onIdleModeCountdownStart(idleModeTimerStart, idleModeTimerValue);
   startIdleModeTimer();
   updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue);
 };
 
+/**
+ * updating idle mode data before sending by `getCurrentIdleModeData`
+ */
+const recalcCurrentIdleModeData = () => {
+  if (!idleModeIsEnabled || idleModeTimerValue === null) { return; }
+
+  const idleModeTimerStartCurrent = Date.now();
+  idleModeTimerValue = Math.floor(idleModeTimerValue! - ((idleModeTimerStartCurrent - idleModeTimerStart) / 1000));
+  idleModeTimerStart = idleModeTimerStartCurrent;
+
+  if (idleModeTimerValue <= 0) {
+    onIdleModeDisabled();
+  } else {
+    updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue);
+  }
+};
+
 const setPracticesToIdle = () => {
-  console.log("setPracticesToIdle");
   activePractice.stopCurrentTimers();
   activePractice.closePracticeWindow();
   passivePractice.stopCurrentTimers();
@@ -69,7 +93,6 @@ const setPracticesToIdle = () => {
 };
 
 const startIdleModeTimer = () => {
-  console.log("startIdleModeTimer");
   idleModeTimerID = setTimeout(onIdleModeDisabled, idleModeTimerValue! * 1000);
 };
 
@@ -78,15 +101,14 @@ const stopIdleModeTimer = () => {
 };
 
 const onIdleModeDisabled = () => {
-  console.log("onIdleModeDisabled");
   idleModeIsEnabled = false;
   idleModeTimerStart = 0;
   idleModeTimerValue = null;
   setupPractice();
+  updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue);
 };
 
 const setupPractice = () => {
-  console.log("setupPractice");
   activePractice.setup();
   passivePractice.setup();
 };
@@ -100,8 +122,7 @@ const onAppQuit = () => {
 };
 
 export const initIdleMode = async () => {
-  console.log("initIdleMode");
-  const idleModeSettings = await getIdleModeData();
+  const idleModeSettings = await getIdleMode();
 
   idleModeIsEnabled = idleModeSettings.isEnabled;
   idleModeTimerValue = idleModeSettings.timerValue;
@@ -118,17 +139,16 @@ export const initIdleMode = async () => {
   idleModeTimerValue = Math.floor(idleModeSettings.timerValue! - ((idleModeTimerStart - idleModeSettings.timerStart) / 1000));
 
   if (idleModeTimerValue <= 0) {
-    setupPractice();
+    onIdleModeDisabled();
   } else {
     startIdleModeTimer();
+    updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue);
   }
-
-  updateIdleModeDBData(idleModeIsEnabled, idleModeTimerStart, idleModeTimerValue)
 };
 
-const updateIdleModeDBData = (isEnabled: IdleModeSettings["isEnabled"], timerStart: IdleModeSettings["timerStart"], timerValue: IdleModeSettings["timerValue"]) => {
+const updateIdleModeDBData = (isEnabled: IdleMode["isEnabled"], timerStart: IdleMode["timerStart"], timerValue: IdleMode["timerValue"]) => {
   updateIdleModeSettingsDataCache.isEnabled = isEnabled;
   updateIdleModeSettingsDataCache.timerStart = timerStart;
   updateIdleModeSettingsDataCache.timerValue = timerValue;
-  updateIdleModeSettingsData(updateIdleModeSettingsDataCache);
-}
+  updateIdleMode(updateIdleModeSettingsDataCache);
+};

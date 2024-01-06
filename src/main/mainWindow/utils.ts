@@ -1,4 +1,5 @@
 import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
+import { getCurrentIdleModeData } from "../idleMode/idleMode";
 import { createMainWindow } from './windowCreation';
 
 /**
@@ -40,4 +41,8 @@ export const onWindowMaximize = () => {
 
 export const onWindowUnmaximize = () => {
   windowInstanceRegistry.get("main")!.getWin()!.webContents.send("setMaximizeStateStoreValue", "maximize");
+};
+
+export const onGetIdleModeData = async () => {
+  windowInstanceRegistry.get("main")!.getWin()!.webContents.send("idle mode initial data", ...getCurrentIdleModeData());
 };

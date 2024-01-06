@@ -16,13 +16,13 @@ export type MonthData = {
 
 export type Word = {
   id: string;
-  learnSuccess: number;  
+  learnSuccess: number;
   practiceCount: number;
   successfulPracticeCount: number;
-  variants: string[];  
+  variants: string[];
   translations: string[];
   description: string;
-}
+};
 
 export type YearData = Record<Month[number], MonthData> & { year: Year; };
 
@@ -68,7 +68,7 @@ export type BasicSettings = {
 
 export type PracticeVariants = keyof AppSettings["practice"];
 
-export type IdleModeSettings = {
+export type IdleMode = {
   isEnabled: boolean;
   timerStart: number;
   timerValue: number | null;
@@ -76,7 +76,7 @@ export type IdleModeSettings = {
 
 export type AppSettings = {
   basic: BasicSettings;
-  idleMode: IdleModeSettings;
+  idleMode: IdleMode;
   practice: {
     passive: PracticeSettings;
     active: PracticeSettings;

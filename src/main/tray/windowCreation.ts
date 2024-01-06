@@ -6,7 +6,7 @@ import { createWindow } from '../../utils/window/windowCreator';
 
 export const trayWindowSizes = {
   height: 105,
-  width: 210,
+  width: 250,
 } as const;
 
 const trayWindowSourceLoader = (win: BrowserWindow) => {

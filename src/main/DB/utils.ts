@@ -1,6 +1,7 @@
+import { windowInstanceRegistry } from "../../shared/windowRegistries/windowInstanceRegistry";
 import { desktopDB } from './desktopDB';
 import { desktopDBPubSub } from './desktopDBPubSub';
-import { AppSettings, IdleModeSettings, Word } from './interface';
+import { AppSettings, IdleMode, Word } from './interface';
 
 export const onAddWord = async (word: Word) => {
   await desktopDB.push(`/dictionary/${word.id}`, word);
@@ -68,43 +69,68 @@ export const getAppSettingsData = async (): Promise<AppSettings> => {
 /* -------------------------------- idle mode ------------------------------- */
 
 // init & update
-export const updateIdleModeSettingsData = async (idleModeData: IdleModeSettings) => {
-  await desktopDB.push('/appSettings/idleMode', idleModeData);
+export const updateIdleMode = async (idleModeData: IdleMode) => {
+  await desktopDB.push('/idleMode', idleModeData);
 };
 
-export const getIdleModeData = async (): Promise<IdleModeSettings> => {
-  return (await desktopDB.getData("/appSettings") as AppSettings).idleMode;
+export const getIdleMode = async (): Promise<IdleMode> => {
+  return desktopDB.getData("/idleMode");
 };
 
 type DictionaryRow = Word & {
   $types: unknown;
 };
 
-const dictionaryDataImport = (rows: DictionaryRow[]) => {
-  // removing unneeded '$types' prop
-  rows.forEach(({ $types, ...word }) => onAddWord(word));
+const dictionaryDataImport = async (rows: DictionaryRow[]) => {
+  for (let i = 0; i < rows.length; i += 1) {
+    // removing unneeded '$types' prop
+    delete rows[i].$types;
+    await onAddWord(rows[i]);
+  }
 };
 
 const practiceSettingsDataImport = (rows) => {
-  updatePracticeData(rows[0].$[1]);
+  return updatePracticeData(rows[0].$[1]);
+};
+
+const idleModeDataImport = (rows) => {
+  return updatePracticeData(rows[0].$[1]);
 };
 
 const appSettingsDataImport = (rows) => {
-  updateAppSettingsData(rows[0].$[1]);
+  return updateAppSettingsData(rows[0].$[1]);
 };
 
-const statisticDataImport = (rows: unknown[]) => {
-  rows.forEach(updateStatistic);
+const statisticDataImport = async (rows: unknown[]) => {
+  for (let i = 0; i < rows.length; i += 1) {
+    await updateStatistic(rows[i]);
+  }
 };
 
 const importHandlers = {
   dictionary: dictionaryDataImport,
   practiceSettings: practiceSettingsDataImport,
   statistic: statisticDataImport,
-  appSettings: appSettingsDataImport
+  appSettings: appSettingsDataImport,
+  idleMode: idleModeDataImport
 };
 
-export const importAppDBData = async (tableName, rows) => {
-  await desktopDB.delete('/');
-  importHandlers[tableName](rows);
+const importHandlersCount = 5;
+let currentImportHandlersInWork: Promise<void>[] = [];
+
+const importAppDBData = async (tableName, rows) => {
+  return importHandlers[tableName](rows);
 };
+
+export const onImportAppData = async (tableName, rows) => {
+  await desktopDB.delete('/');
+  currentImportHandlersInWork.push(importAppDBData(tableName, rows));
+
+  if (currentImportHandlersInWork.length === importHandlersCount) {
+    Promise.allSettled(currentImportHandlersInWork)
+      .then(() => {
+        currentImportHandlersInWork = [];
+        windowInstanceRegistry.get("main")?.getWin()?.webContents.send("importDBDataFinished");
+      })
+  }
+}

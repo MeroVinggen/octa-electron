@@ -6,7 +6,9 @@ export const initAutoLauncher = () => {
 };
 
 export const enableAutoLaunch = () => {
-  console.log("app auto launch disabled");
+  if (import.meta.env.DEV) {
+    console.log("app auto launch disabled");
+  }
   return;
 
   if (import.meta.env.PROD) {
