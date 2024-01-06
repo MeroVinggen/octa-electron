@@ -1,24 +1,16 @@
-import { ipcMain } from 'electron';
-import { windowInstanceRegistry } from '../../shared/windowRegistries/windowInstanceRegistry';
+import { app, ipcMain, shell } from 'electron';
+import { ERROR_LOG_FOLDER_PATH } from "../../shared/Errors/utils";
+import { closeApp } from "../App/utils";
 
-const errorMsgs: string[] = [];
-
-export const addErrorMsg = (msg: string) => {
-  errorMsgs.push(msg);
-
-  const errorWindow = windowInstanceRegistry.get("error")!;
-
-  // if error window is already open sending updated errors array
-  if (!errorWindow.getIsClosed()) {
-    errorWindow.getWin()!.webContents.send("errorWindowGetError", errorMsgs);
-  }
-};
-
-// close window proceeds in ipcRendererErrorListeners (entire app close)
-// and error window close event in window creation
+// if the error window will be closed in any other way other than "errorWinClose"
+// the app will exit (look at error window creation listeners)
 export const initErrorWindowListeners = () => {
-  // on window asking for error msg
-  ipcMain.on("errorWindowGetError", (e) => {
-    e.reply("errorWindowGetError", errorMsgs);
+  ipcMain.on("errorWinClose", () => {
+    app.exit(1);
+  });
+
+  ipcMain.on("errorWinOpenErrorLogsFolder", () => {
+    shell.openPath(ERROR_LOG_FOLDER_PATH);
+    closeApp();
   });
 };

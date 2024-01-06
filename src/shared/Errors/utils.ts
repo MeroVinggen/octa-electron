@@ -1,7 +1,6 @@
 import { existsSync, mkdirSync } from 'fs';
 import { appendFile } from 'fs/promises';
 import { createErrorWindow } from '../../main/errorWindow/windowCreation';
-import { addErrorMsg } from '../../main/errorWindow/windowMessaging';
 import { destroyTray } from '../../main/tray/utils';
 import { buildPathFromRoot } from '../../utils/helpers';
 import { windowInstanceRegistry } from '../windowRegistries/windowInstanceRegistry';
@@ -24,8 +23,7 @@ export const createErrorLogFolder = () => {
 const recordError = (err, path: string) =>
   appendFile(path, `\n${String(new Date().toDateString())} - ${err}\n`);
 
-const showErrorWindow = (error: string) => {
-  addErrorMsg(error);
+const showErrorWindow = () => {
 
   // open error window only if it's closed
   if (windowInstanceRegistry.get("error")!.getIsClosed()) {
@@ -36,7 +34,7 @@ const showErrorWindow = (error: string) => {
 export const onError = async (error: Error, errorRecordFilePath: string) => {
   await recordError((error.message || error) + "\nstack: " + error.stack, errorRecordFilePath);
   closeAllSourcesExceptError();
-  showErrorWindow((error.message || error) as string);
+  showErrorWindow();
 };
 
 /**

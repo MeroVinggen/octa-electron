@@ -26,7 +26,7 @@ export const createTrayWindow = () => {
       show: false,
       frame: false,
       resizable: false,
-      transparent: true,
+      transparent: false,
       alwaysOnTop: true,
       skipTaskbar: true,
       webPreferences: {

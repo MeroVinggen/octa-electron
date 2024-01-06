@@ -25,7 +25,6 @@ export const createErrorWindow = () => {
       y: height / 2 - 45,
       show: false,
       frame: false,
-      transparent: true,
       resizable: false,
       icon: appIconURL,
       webPreferences: {
