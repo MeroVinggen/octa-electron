@@ -6,15 +6,15 @@ import { checkDictionaryIsEmpty, getAppSettingsData } from '../DB/utils';
 import { PracticeSettingsSnapshot } from './PracticeSettingsSnapshot';
 
 export class Practice {
-  actualTimeFrames!: TimeFrame[];
-  currentTimeFrame!: TimeFrame;
-  interval!: number;
-  timeFrameTimerId!: NodeJS.Timeout;
-  intervalTimerId!: NodeJS.Timeout;
-  windowInstanceID: WindowNames;
-  settingsSnapshot: PracticeSettingsSnapshot;
-  windowCreator: Function;
-  practiceKey: PracticeVariants;
+  private actualTimeFrames!: TimeFrame[];
+  private currentTimeFrame!: TimeFrame;
+  private interval!: number;
+  private timeFrameTimerId!: NodeJS.Timeout;
+  private intervalTimerId!: NodeJS.Timeout;
+  private windowInstanceID: WindowNames;
+  private settingsSnapshot: PracticeSettingsSnapshot;
+  private windowCreator: Function;
+  private practiceKey: PracticeVariants;
 
   constructor(
     windowInstanceID: Practice["windowInstanceID"],
@@ -107,7 +107,8 @@ export class Practice {
   private initTimeFrameTimer() {
     // next time frame to start
     this.currentTimeFrame = this.actualTimeFrames.shift()!;
-    const leftTimeToNextTimeFrameInMS = this.getTimeToNextTimeFrame();
+    const timeToNextTimeFrameInMS = this.getTimeToNextTimeFrame();
+    const leftTimeToNextTimeFrameInMS = timeToNextTimeFrameInMS < 0 ? 0 : timeToNextTimeFrameInMS;
     this.timeFrameTimerId = setTimeout(this.onIntervalTick, leftTimeToNextTimeFrameInMS);
   };
 
@@ -134,8 +135,8 @@ export class Practice {
   };
 
   /**
-  * timeout to next practice on current timeFrame by interval
-  */
+    * timeout to next practice on current timeFrame by interval
+    */
   private setPracticeTimeout = () => {
     this.intervalTimerId = setTimeout(this.onIntervalTick, this.interval);
   };
